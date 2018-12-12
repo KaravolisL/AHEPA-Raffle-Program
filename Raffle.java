@@ -1,3 +1,11 @@
+// General to do:
+// TODO: Splash screen
+// TODO: Menu Bar
+// TODO: Background picture
+// TODO: Test with other screens
+
+
+
 import javafx.application.Application;
 import javafx.geometry.*;
 import javafx.stage.*;
@@ -38,17 +46,28 @@ public class Raffle extends Application {
 
 
 		VBox rows = new VBox();
-		//rows.setPadding(new Insets(10));
-
 		HBox header = new HBox();
 
-		Label ticketsRemaining = new Label("Tickets Remaining: 255");
-		Label ticketsDrawn = new Label("Tickets Drawn: 0");
-		Label lastTicketDrawn = new Label("Last Ticket Drawn:  ");
 
-		ticketsRemaining.setStyle("-fx-border-color: black;");
+		Rectangle ticketsRemaining = new Rectangle(screenWidth/3, screenHeight/17);
+		Text ticketsRemainingText = new Text("Tickets Remaining: 255");
+		StackPane ticketsRemainingPane = new StackPane(ticketsRemaining, ticketsRemainingText);
+		Rectangle ticketsDrawn = new Rectangle(screenWidth/3, screenHeight/17);
+		Text ticketsDrawnText = new Text("Tickets Drawn: 0");
+		StackPane ticketsDrawnPane = new StackPane(ticketsDrawn, ticketsDrawnText);
+		Rectangle lastTicketDrawn = new Rectangle(screenWidth/3, screenHeight/17);
+		Text lastTicketDrawnText = new Text("Last Ticket Drawn:  ");
+		StackPane lastTicketDrawnPane = new StackPane(lastTicketDrawn, lastTicketDrawnText);
 
-		header.getChildren().addAll(ticketsRemaining, ticketsDrawn, lastTicketDrawn);
+		ticketsRemaining.setFill(Color.WHITE);
+		ticketsRemaining.setStroke(Color.VIOLET);
+		ticketsDrawn.setFill(Color.WHITE);
+		ticketsDrawn.setStroke(Color.VIOLET);
+		lastTicketDrawn.setFill(Color.WHITE);
+		lastTicketDrawn.setStroke(Color.VIOLET);
+
+
+		header.getChildren().addAll(ticketsRemainingPane, ticketsDrawnPane, lastTicketDrawnPane);
 
 		rows.getChildren().add(header);
 
@@ -69,7 +88,7 @@ public class Raffle extends Application {
 			ticketText[i] = new Text((i+1) + "\n" + ticketNames.get(i));
 			ticketText[i].setTextAlignment(TextAlignment.CENTER);
 			ticketText[i].setWrappingWidth(screenWidth/15);
-			ticketLayout[i] = new StackPane();
+			ticketLayout[i] = new StackPane(); // combine these two???
 			ticketLayout[i].getChildren().addAll(tickets[i], ticketText[i]);
 			ticketCols[counter].getChildren().add(ticketLayout[i]);
 			if (ticketCols[counter].getChildren().size() == 15) {
