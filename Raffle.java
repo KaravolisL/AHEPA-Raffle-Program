@@ -88,8 +88,7 @@ public class Raffle extends Application {
 			ticketText[i] = new Text((i+1) + "\n" + ticketNames.get(i));
 			ticketText[i].setTextAlignment(TextAlignment.CENTER);
 			ticketText[i].setWrappingWidth(screenWidth/15);
-			ticketLayout[i] = new StackPane(); // combine these two???
-			ticketLayout[i].getChildren().addAll(tickets[i], ticketText[i]);
+			ticketLayout[i] = new StackPane(tickets[i], ticketText[i]); 
 			ticketCols[counter].getChildren().add(ticketLayout[i]);
 			if (ticketCols[counter].getChildren().size() == 15) {
 				counter++;
