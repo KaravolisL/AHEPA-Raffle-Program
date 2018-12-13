@@ -2,7 +2,7 @@
 // TODO: Splash screen
 // TODO: Menu Bar
 // TODO: Background picture
-// TODO: Test with other screens
+// TODO: Responsive to window resize
 // TODO: Change to grid pane?
 // TODO: User input of ticketNames file
 
@@ -25,6 +25,11 @@ import java.io.*;
 
 public class Raffle extends Application {
 
+	ArrayList<Integer> raffleList = new ArrayList<Integer>(255);
+	int ticketsRemaining = 255;
+	int ticketsDrawn = 0;
+	int lastTicketDrawn = 0;
+
 	@Override
 	public void init() throws Exception {
 		super.init();
@@ -43,30 +48,31 @@ public class Raffle extends Application {
 		}
 		in.close();
 		// TODO: Throw error when name is too long
+		// TODO: Deal with apostrophes
 
 		// Finding screen dimensions
 		Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
 		double screenHeight = bounds.getMaxY();
 		double screenWidth = bounds.getMaxX();
 		// Creating row of headers
-		Rectangle ticketsRemaining = new Rectangle(screenWidth/3, screenHeight/17);
-		Text ticketsRemainingText = new Text("Tickets Remaining: 255");
-		StackPane ticketsRemainingPane = new StackPane(ticketsRemaining, ticketsRemainingText);
-		Rectangle ticketsDrawn = new Rectangle(screenWidth/3, screenHeight/17);
+		Rectangle ticketsRemainingRect = new Rectangle(screenWidth/3, screenHeight/17);
+		Text ticketsRemainingText = new Text("Tickets Remaining: " + ticketsRemaining);
+		StackPane ticketsRemainingPane = new StackPane(ticketsRemainingRect, ticketsRemainingText);
+		Rectangle ticketsDrawnRect = new Rectangle(screenWidth/3, screenHeight/17);
 		Text ticketsDrawnText = new Text("Tickets Drawn: 0");
-		StackPane ticketsDrawnPane = new StackPane(ticketsDrawn, ticketsDrawnText);
-		Rectangle lastTicketDrawn = new Rectangle(screenWidth/3, screenHeight/17);
+		StackPane ticketsDrawnPane = new StackPane(ticketsDrawnRect, ticketsDrawnText);
+		Rectangle lastTicketDrawnRect = new Rectangle(screenWidth/3, screenHeight/17);
 		Text lastTicketDrawnText = new Text("Last Ticket Drawn:  ");
-		StackPane lastTicketDrawnPane = new StackPane(lastTicketDrawn, lastTicketDrawnText);
+		StackPane lastTicketDrawnPane = new StackPane(lastTicketDrawnRect, lastTicketDrawnText);
 		HBox header = new HBox(ticketsRemainingPane, ticketsDrawnPane, lastTicketDrawnPane);
 		VBox rows = new VBox(header);
 		// Styling row of headers
-		ticketsRemaining.setFill(Color.WHITE);
-		ticketsRemaining.setStroke(Color.VIOLET);
-		ticketsDrawn.setFill(Color.WHITE);
-		ticketsDrawn.setStroke(Color.VIOLET);
-		lastTicketDrawn.setFill(Color.WHITE);
-		lastTicketDrawn.setStroke(Color.VIOLET);
+		ticketsRemainingRect.setFill(Color.WHITE);
+		ticketsRemainingRect.setStroke(Color.VIOLET);
+		ticketsDrawnRect.setFill(Color.WHITE);
+		ticketsDrawnRect.setStroke(Color.VIOLET);
+		lastTicketDrawnRect.setFill(Color.WHITE);
+		lastTicketDrawnRect.setStroke(Color.VIOLET);
 		// Initializing arrays of elements
 		Rectangle[] tickets = new Rectangle[225];
 		Text[] ticketText = new Text[225];
@@ -89,12 +95,15 @@ public class Raffle extends Application {
 			ticketText[i].setWrappingWidth(screenWidth/15);
 			// Constructing StackPane
 			ticketLayout[i] = new StackPane(tickets[i], ticketText[i]);
-			ticketLayout[i].setId(""+i+1); // Will I use this?
+			ticketLayout[i].setId(""+(i+1)); // Will I use this?
 			// Adding tickets to columns
 			ticketCols[counter].getChildren().add(ticketLayout[i]);
 			// Adding action listeners
-			final int ticketNumber = i+1;
-			ticketLayout[i].setOnMousePressed(e -> removeTicket(ticketNumber));
+			final int ticketNumber = i;
+			ticketLayout[i].setOnMousePressed(e -> {
+				removeTicket(ticketLayout[ticketNumber]);
+				refreshHeader(ticketsRemainingText, ticketsDrawnText, lastTicketDrawnText);
+			});
 			// Changing rows
 			if (ticketCols[counter].getChildren().size() == 15) {
 				counter++;
@@ -123,7 +132,37 @@ public class Raffle extends Application {
 	}
 
 	// Event methods
-	public void removeTicket(int ticketNumber) {
-		System.out.println(ticketNumber);
+	/* removeTicket
+	* This method receives a StackPane when it is clicked and
+	* "deletes" its contents. The ticketNumber is then added to raffleList.
+	* It will also update the values for the header
+	*
+	* @param ticket the StackPane to be removed
+	*/
+	public void removeTicket(StackPane ticket) {
+		// Update header values;
+		ticketsRemaining--;
+		ticketsDrawn++;
+		lastTicketDrawn = Integer.parseInt(ticket.getId());
+		// Makes StackPane invisible
+		ticket.setVisible(false);
+		// Push ticketNumber to raffleStack
+		raffleList.add(lastTicketDrawn);
+	}
+
+
+
+	/* refreshHeader
+	* This method will update the header in the GUI when a ticket is
+	* removed or replaced
+	*
+	* @param tr Text for ticketsRemaining
+	* @param td Text for ticketsDrawn
+	* @param ltd Text for lastTicketDrawn
+	*/
+	public void refreshHeader(Text tr, Text td, Text ltd) {
+		tr.setText("Tickets Remaining: " + ticketsRemaining);
+		td.setText("Tickets Drawn: " + ticketsDrawn);
+		ltd.setText("Last Ticket Drawn: " + lastTicketDrawn);
 	}
 }
