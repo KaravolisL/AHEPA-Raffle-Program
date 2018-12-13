@@ -42,13 +42,24 @@ public class Raffle extends Application {
 
 		// Bringing in ticket names
 		ArrayList<String> ticketNames = new ArrayList<String>();
-		BufferedReader in = new BufferedReader(new FileReader("ticketNames.txt"));
-		while (in.ready()) {
-			ticketNames.add(in.readLine());
+		BufferedReader inTickets = new BufferedReader(new FileReader("ticketNames.txt"));
+		while (inTickets.ready()) {
+			ticketNames.add(inTickets.readLine());
 		}
-		in.close();
+		inTickets.close();
 		// TODO: Throw error when name is too long
 		// TODO: Deal with apostrophes
+
+		// Bringing in the prize information
+		Hashtable<Integer, String> prizeInfo = new Hashtable<Integer, String>();
+		BufferedReader inPrizes = new BufferedReader(new FileReader("prizeInfo.txt"));
+		while (inPrizes.ready()) {
+			String line = inPrizes.readLine();
+			Integer prizeNumber = Integer.parseInt(line.substring(0, line.indexOf(" ")-1));
+			String prizeDescription = line.substring(line.indexOf(" "));
+			prizeInfo.put(prizeNumber, prizeDescription);
+		}
+		inPrizes.close();
 
 		// Finding screen dimensions
 		Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
@@ -148,6 +159,8 @@ public class Raffle extends Application {
 		ticket.setVisible(false);
 		// Push ticketNumber to raffleStack
 		raffleList.add(lastTicketDrawn);
+		// Checks if a prize alert should be shown
+		prizeCheck();
 	}
 
 
@@ -165,4 +178,11 @@ public class Raffle extends Application {
 		td.setText("Tickets Drawn: " + ticketsDrawn);
 		ltd.setText("Last Ticket Drawn: " + lastTicketDrawn);
 	}
+
+
+	public void prizeCheck() {
+
+	}
+
+
 }
