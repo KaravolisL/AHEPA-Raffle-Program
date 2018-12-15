@@ -5,8 +5,7 @@
 // TODO: Responsive to window resize
 // TODO: Change to grid pane?
 // TODO: User input of ticketNames file
-
-
+// TODO: User input of prize info
 
 import javafx.application.Application;
 import javafx.geometry.*;
@@ -51,15 +50,16 @@ public class Raffle extends Application {
 		// TODO: Deal with apostrophes
 
 		// Bringing in the prize information
-		Hashtable<Integer, String> prizeInfo = new Hashtable<Integer, String>();
+		Hashtable<Integer, String> prizeInfo = new Hashtable<Integer, String>(25); // <prizeNumber, prizeDescription>
 		BufferedReader inPrizes = new BufferedReader(new FileReader("prizeInfo.txt"));
 		while (inPrizes.ready()) {
 			String line = inPrizes.readLine();
-			Integer prizeNumber = Integer.parseInt(line.substring(0, line.indexOf(" ")-1));
+			Integer prizeNumber = Integer.parseInt(line.substring(0, line.indexOf(" ")));
 			String prizeDescription = line.substring(line.indexOf(" "));
 			prizeInfo.put(prizeNumber, prizeDescription);
 		}
 		inPrizes.close();
+		// TODO: Throw error when file is incorrect format
 
 		// Finding screen dimensions
 		Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
@@ -106,7 +106,7 @@ public class Raffle extends Application {
 			ticketText[i].setWrappingWidth(screenWidth/15);
 			// Constructing StackPane
 			ticketLayout[i] = new StackPane(tickets[i], ticketText[i]);
-			ticketLayout[i].setId(""+(i+1)); // Will I use this?
+			ticketLayout[i].setId(""+(i+1));
 			// Adding tickets to columns
 			ticketCols[counter].getChildren().add(ticketLayout[i]);
 			// Adding action listeners
@@ -114,6 +114,7 @@ public class Raffle extends Application {
 			ticketLayout[i].setOnMousePressed(e -> {
 				removeTicket(ticketLayout[ticketNumber]);
 				refreshHeader(ticketsRemainingText, ticketsDrawnText, lastTicketDrawnText);
+				prizeCheck(prizeInfo);
 			});
 			// Changing rows
 			if (ticketCols[counter].getChildren().size() == 15) {
@@ -159,11 +160,7 @@ public class Raffle extends Application {
 		ticket.setVisible(false);
 		// Push ticketNumber to raffleStack
 		raffleList.add(lastTicketDrawn);
-		// Checks if a prize alert should be shown
-		prizeCheck();
 	}
-
-
 
 	/* refreshHeader
 	* This method will update the header in the GUI when a ticket is
@@ -179,10 +176,18 @@ public class Raffle extends Application {
 		ltd.setText("Last Ticket Drawn: " + lastTicketDrawn);
 	}
 
-
-	public void prizeCheck() {
-
+	/* prizeCheck
+	* This method will search prizeInfo for the next ticket number. If
+	* The next ticket number is found, a new window will be created that
+	* displays the prizeDescription
+	*
+	* @param prizeInfo Hashtable to contains the ticket number and prize
+	* prizeDescription
+	* @param
+	*/
+	public void prizeCheck(Hashtable prizeInfo) {
+		if (prizeInfo.containsKey(ticketsDrawn + 1)) {
+			prizeAlert.display(Integer.toString(ticketsDrawn+1), (String)prizeInfo.get(ticketsDrawn+1));
+		}
 	}
-
-
 }
