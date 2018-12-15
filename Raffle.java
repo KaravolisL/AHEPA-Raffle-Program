@@ -183,7 +183,6 @@ public class Raffle extends Application {
 	*
 	* @param prizeInfo Hashtable to contains the ticket number and prize
 	* prizeDescription
-	* @param
 	*/
 	public void prizeCheck(Hashtable prizeInfo) {
 		if (prizeInfo.containsKey(ticketsDrawn + 1)) {
