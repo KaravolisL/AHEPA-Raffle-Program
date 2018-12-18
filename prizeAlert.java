@@ -1,8 +1,6 @@
 // TODO: Remove window peripherals
 
 
-
-
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.text.*;
@@ -22,9 +20,7 @@ public class prizeAlert {
             window.initModality(Modality.APPLICATION_MODAL);
             window.setTitle(title);
             Text description = new Text(prizeDescription);
-            Rectangle box = new Rectangle(20,20);
-            box.setStroke(Color.BLACK);
-            VBox layout = new VBox(description, box);
+            VBox layout = new VBox(description);
             layout.setAlignment(Pos.CENTER);
 
             // Finding screen dimensions

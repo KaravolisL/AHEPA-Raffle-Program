@@ -68,7 +68,10 @@ public class Raffle extends Application {
 		// Creating row of headers
 		Rectangle ticketsRemainingRect = new Rectangle(screenWidth/3, screenHeight/17);
 		Text ticketsRemainingText = new Text("Tickets Remaining: " + ticketsRemaining);
-		StackPane ticketsRemainingPane = new StackPane(ticketsRemainingRect, ticketsRemainingText);
+		// TextField for typing removal placed in the center of ticketRemainingPane
+		TextField textField = new TextField();
+		textField.setOpacity(0);
+		StackPane ticketsRemainingPane = new StackPane(ticketsRemainingRect, ticketsRemainingText, textField);
 		Rectangle ticketsDrawnRect = new Rectangle(screenWidth/3, screenHeight/17);
 		Text ticketsDrawnText = new Text("Tickets Drawn: 0");
 		StackPane ticketsDrawnPane = new StackPane(ticketsDrawnRect, ticketsDrawnText);
@@ -123,7 +126,24 @@ public class Raffle extends Application {
 		}
 		rows.getChildren().addAll(ticketCols);
 
-
+		// Implementing textField onKeyPressed
+		textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			public void handle(KeyEvent ke) {
+				if (ke.getCode() == KeyCode.ENTER) {
+					// Getting the number that was typed into the text field
+					Integer number = Integer.parseInt(textField.getText());
+					if (number > 0 && number < 256) {
+						StackPane chosenTicket = ticketLayout[number-1];
+						if (chosenTicket.isVisible()) {
+							removeTicket(chosenTicket);
+							refreshHeader(ticketsRemainingText, ticketsDrawnText, lastTicketDrawnText);
+							prizeCheck(prizeInfo);
+						}
+					}
+					textField.clear();
+				}
+			}
+		});
 
 		// Preparing scene for construction
 		primaryStage.setMaximized(true);
