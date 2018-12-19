@@ -1,6 +1,3 @@
-// TODO: Remove window peripherals
-
-
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.text.*;
@@ -15,8 +12,8 @@ import javafx.util.Duration;
 
 public class prizeAlert {
       public static int waitTime = 4;
-      public static final int FONT_SIZE = 20;
-      public static final BackgroundFill BACKGROUND_COLOR = new BackgroundFill(Color.VIOLET, new CornerRadii(0), new Insets(0));
+      public static int FONT_SIZE = 20;
+      public static BackgroundFill BACKGROUND_COLOR = new BackgroundFill(Color.VIOLET, new CornerRadii(0), new Insets(0));
 
       public static void display(String title, String prizeDescription) {
             Stage window = new Stage(StageStyle.UNDECORATED);
