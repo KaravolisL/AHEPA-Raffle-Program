@@ -67,6 +67,22 @@ public class Raffle extends Application {
 		Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
 		double screenHeight = bounds.getMaxY();
 		double screenWidth = bounds.getMaxX();
+		// Creating Menu
+		Menu fileMenu = new Menu("File");
+		Menu viewMenu = new Menu("View");
+		Menu helpMenu = new Menu("Help");
+		// Creating menu items
+		MenuItem about = new MenuItem("About");
+		// Adding menu items
+		helpMenu.getItems().add(about);
+		// Creating Menu Bar
+		MenuBar menuBar = new MenuBar();
+		menuBar.getMenus().addAll(fileMenu, viewMenu, helpMenu);
+		// Creating layout for Menu
+		BorderPane menuLayout = new BorderPane();
+		menuLayout.setTop(menuBar);
+		// Functionality for menuItems
+		about.setOnAction(e -> aboutWindow.display());
 		// Creating row of headers
 		Rectangle ticketsRemainingRect = new Rectangle(screenWidth/3, screenHeight/17);
 		Text ticketsRemainingText = new Text("Tickets Remaining: " + ticketsRemaining);
@@ -81,7 +97,7 @@ public class Raffle extends Application {
 		Text lastTicketDrawnText = new Text("Last Ticket Drawn:  ");
 		StackPane lastTicketDrawnPane = new StackPane(lastTicketDrawnRect, lastTicketDrawnText);
 		HBox header = new HBox(ticketsRemainingPane, ticketsDrawnPane, lastTicketDrawnPane);
-		VBox rows = new VBox(header);
+		VBox rows = new VBox(menuBar, header);
 		// Styling row of headers
 		ticketsRemainingRect.setFill(BACKGROUND_COLOR);
 		ticketsRemainingRect.setStroke(BORDER_COLOR);
