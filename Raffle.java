@@ -24,10 +24,12 @@ import java.io.*;
 
 public class Raffle extends Application {
 
-	ArrayList<Integer> raffleList = new ArrayList<Integer>(255);
+	public ArrayList<Integer> raffleList = new ArrayList<Integer>(255);
 	int ticketsRemaining = 255;
 	int ticketsDrawn = 0;
 	int lastTicketDrawn = 0;
+	public final Paint BACKGROUND_COLOR = Color.WHITE;
+	public final Paint BORDER_COLOR = Color.BLACK;
 
 	@Override
 	public void init() throws Exception {
@@ -81,12 +83,12 @@ public class Raffle extends Application {
 		HBox header = new HBox(ticketsRemainingPane, ticketsDrawnPane, lastTicketDrawnPane);
 		VBox rows = new VBox(header);
 		// Styling row of headers
-		ticketsRemainingRect.setFill(Color.WHITE);
-		ticketsRemainingRect.setStroke(Color.VIOLET);
-		ticketsDrawnRect.setFill(Color.WHITE);
-		ticketsDrawnRect.setStroke(Color.VIOLET);
-		lastTicketDrawnRect.setFill(Color.WHITE);
-		lastTicketDrawnRect.setStroke(Color.VIOLET);
+		ticketsRemainingRect.setFill(BACKGROUND_COLOR);
+		ticketsRemainingRect.setStroke(BORDER_COLOR);
+		ticketsDrawnRect.setFill(BACKGROUND_COLOR);
+		ticketsDrawnRect.setStroke(BORDER_COLOR);
+		lastTicketDrawnRect.setFill(BACKGROUND_COLOR);
+		lastTicketDrawnRect.setStroke(BORDER_COLOR);
 		// Initializing arrays of elements
 		Rectangle[] tickets = new Rectangle[225];
 		Text[] ticketText = new Text[225];
@@ -101,8 +103,8 @@ public class Raffle extends Application {
 		for (int i = 0; i < 225; i++) {
 			// Creating and styling rectangles
 			tickets[i] = new Rectangle(screenWidth/15,screenHeight/17);
-			tickets[i].setFill(Color.WHITE);
-			tickets[i].setStroke(Color.VIOLET);
+			tickets[i].setFill(BACKGROUND_COLOR);
+			tickets[i].setStroke(BORDER_COLOR);
 			// Creating and styling text
 			ticketText[i] = new Text((i+1) + "\n" + ticketNames.get(i));
 			ticketText[i].setTextAlignment(TextAlignment.CENTER);
