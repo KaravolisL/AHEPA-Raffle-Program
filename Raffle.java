@@ -135,7 +135,6 @@ public class Raffle extends Application {
 					 "-fx-background-size: 100% 100%;");
 		rows.getChildren().add(mainTable);
 
-
 		// Implementing textField onKeyPressed
 		textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent ke) {
@@ -167,6 +166,15 @@ public class Raffle extends Application {
 					}
 					textField.clear();
 				}
+			}
+		});
+
+		// Implementing undo button on lastTicketDrawnPane
+		lastTicketDrawnPane.setOnMouseClicked(e -> {
+			if (!raffleList.isEmpty()) {
+				replaceTicket(ticketLayout[raffleList.get(raffleList.size()-1)-1]);
+				refreshHeader(ticketsRemainingText, ticketsDrawnText, lastTicketDrawnText);
+				prizeCheck(prizeInfo);
 			}
 		});
 
@@ -203,8 +211,29 @@ public class Raffle extends Application {
 		lastTicketDrawn = Integer.parseInt(ticket.getId());
 		// Makes StackPane invisible
 		ticket.setVisible(false);
-		// Push ticketNumber to raffleStack
+		// add ticketNumber to raffleList
 		raffleList.add(lastTicketDrawn);
+	}
+
+	/* replaceTicket
+	* This method recieves a StackPane and makes it visible. The ticketNumber
+	* is removed from raffleList. It will also update the values for the header
+	*
+	* @param ticket the StackPane to be replaced
+	*/
+	public void replaceTicket(StackPane ticket) {
+		// Remove last ticket from raffleList
+		raffleList.remove(raffleList.size()-1);
+		// Update header values
+		ticketsRemaining++;
+		ticketsDrawn--;
+		if (raffleList.size() > 0) {
+			lastTicketDrawn = raffleList.get(raffleList.size()-1);
+		} else {
+			lastTicketDrawn = 0;
+		}
+		// Makes StackPane visible
+		ticket.setVisible(true);
 	}
 
 	/* refreshHeader
