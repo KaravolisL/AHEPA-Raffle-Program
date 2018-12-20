@@ -126,7 +126,15 @@ public class Raffle extends Application {
 				counter++;
 			}
 		}
-		rows.getChildren().addAll(ticketCols);
+		// Adding rows into separate VBox
+		VBox mainTable = new VBox();
+		mainTable.getChildren().addAll(ticketCols);
+		// Adding the background image
+		mainTable.setStyle("-fx-background-image: url('Logo.jpg') no-repeat center center fixed;" +
+					 "-fx-background-size: 100% 100%;");
+		//mainTable.setStyle();
+		rows.getChildren().add(mainTable);
+
 
 		// Implementing textField onKeyPressed
 		textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
