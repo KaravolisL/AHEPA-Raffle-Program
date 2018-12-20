@@ -1,7 +1,7 @@
 // General to do:
 // TODO: Splash screen
 // TODO: Menu Bar
-// TODO: Background picture
+// TODO: Undo button
 // TODO: Responsive to window resize
 // TODO: Change to grid pane?
 // TODO: User input of ticketNames file
@@ -21,11 +21,12 @@ import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import java.util.*;
 import java.io.*;
+import java.lang.*;
 
 public class Raffle extends Application {
 
 	public ArrayList<Integer> raffleList = new ArrayList<Integer>(255);
-	int ticketsRemaining = 255;
+	int ticketsRemaining = 225;
 	int ticketsDrawn = 0;
 	int lastTicketDrawn = 0;
 	public final Paint BACKGROUND_COLOR = Color.WHITE;
@@ -132,7 +133,6 @@ public class Raffle extends Application {
 		// Adding the background image
 		mainTable.setStyle("-fx-background-image: url('Logo.jpg') no-repeat center center fixed;" +
 					 "-fx-background-size: 100% 100%;");
-		//mainTable.setStyle();
 		rows.getChildren().add(mainTable);
 
 
@@ -141,8 +141,23 @@ public class Raffle extends Application {
 			public void handle(KeyEvent ke) {
 				if (ke.getCode() == KeyCode.ENTER) {
 					// Getting the number that was typed into the text field
-					Integer number = Integer.parseInt(textField.getText());
-					if (number > 0 && number < 256) {
+					Integer number = 0;
+					try {
+						number = Integer.parseInt(textField.getText());
+					} catch (Exception e) {
+						textField.clear();
+					}
+					if (number == 800) {
+						for (int i = 1; i < 226; i++) {
+							StackPane chosenTicket = ticketLayout[i-1];
+							if (chosenTicket.isVisible()) {
+								removeTicket(chosenTicket);
+								refreshHeader(ticketsRemainingText, ticketsDrawnText, lastTicketDrawnText);
+								prizeCheck(prizeInfo);
+							}
+						}
+					}
+					if (number > 0 && number < 226) {
 						StackPane chosenTicket = ticketLayout[number-1];
 						if (chosenTicket.isVisible()) {
 							removeTicket(chosenTicket);
@@ -182,7 +197,7 @@ public class Raffle extends Application {
 	* @param ticket the StackPane to be removed
 	*/
 	public void removeTicket(StackPane ticket) {
-		// Update header values;
+		// Update header values
 		ticketsRemaining--;
 		ticketsDrawn++;
 		lastTicketDrawn = Integer.parseInt(ticket.getId());
