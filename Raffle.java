@@ -1,7 +1,6 @@
 // General to do:
 // TODO: Splash screen
 // TODO: Menu Bar
-// TODO: Background picture
 // TODO: Responsive to window resize
 // TODO: Change to grid pane?
 // TODO: User input of ticketNames file
@@ -21,11 +20,12 @@ import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import java.util.*;
 import java.io.*;
+import java.lang.*;
 
 public class Raffle extends Application {
 
 	public ArrayList<Integer> raffleList = new ArrayList<Integer>(255);
-	int ticketsRemaining = 255;
+	int ticketsRemaining = 225;
 	int ticketsDrawn = 0;
 	int lastTicketDrawn = 0;
 	public final Paint BACKGROUND_COLOR = Color.WHITE;
@@ -142,15 +142,36 @@ public class Raffle extends Application {
 				counter++;
 			}
 		}
-		rows.getChildren().addAll(ticketCols);
+		// Adding rows into separate VBox
+		VBox mainTable = new VBox();
+		mainTable.getChildren().addAll(ticketCols);
+		// Adding the background image
+		mainTable.setStyle("-fx-background-image: url('Logo.jpg') no-repeat center center fixed;" +
+					 "-fx-background-size: 100% 100%;");
+		rows.getChildren().add(mainTable);
 
 		// Implementing textField onKeyPressed
 		textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent ke) {
 				if (ke.getCode() == KeyCode.ENTER) {
 					// Getting the number that was typed into the text field
-					Integer number = Integer.parseInt(textField.getText());
-					if (number > 0 && number < 256) {
+					Integer number = 0;
+					try {
+						number = Integer.parseInt(textField.getText());
+					} catch (Exception e) {
+						textField.clear();
+					}
+					if (number == 800) {
+						for (int i = 1; i < 226; i++) {
+							StackPane chosenTicket = ticketLayout[i-1];
+							if (chosenTicket.isVisible()) {
+								removeTicket(chosenTicket);
+								refreshHeader(ticketsRemainingText, ticketsDrawnText, lastTicketDrawnText);
+								prizeCheck(prizeInfo);
+							}
+						}
+					}
+					if (number > 0 && number < 226) {
 						StackPane chosenTicket = ticketLayout[number-1];
 						if (chosenTicket.isVisible()) {
 							removeTicket(chosenTicket);
@@ -160,6 +181,15 @@ public class Raffle extends Application {
 					}
 					textField.clear();
 				}
+			}
+		});
+
+		// Implementing undo button on lastTicketDrawnPane
+		lastTicketDrawnPane.setOnMouseClicked(e -> {
+			if (!raffleList.isEmpty()) {
+				replaceTicket(ticketLayout[raffleList.get(raffleList.size()-1)-1]);
+				refreshHeader(ticketsRemainingText, ticketsDrawnText, lastTicketDrawnText);
+				prizeCheck(prizeInfo);
 			}
 		});
 
@@ -190,14 +220,35 @@ public class Raffle extends Application {
 	* @param ticket the StackPane to be removed
 	*/
 	public void removeTicket(StackPane ticket) {
-		// Update header values;
+		// Update header values
 		ticketsRemaining--;
 		ticketsDrawn++;
 		lastTicketDrawn = Integer.parseInt(ticket.getId());
 		// Makes StackPane invisible
 		ticket.setVisible(false);
-		// Push ticketNumber to raffleStack
+		// add ticketNumber to raffleList
 		raffleList.add(lastTicketDrawn);
+	}
+
+	/* replaceTicket
+	* This method recieves a StackPane and makes it visible. The ticketNumber
+	* is removed from raffleList. It will also update the values for the header
+	*
+	* @param ticket the StackPane to be replaced
+	*/
+	public void replaceTicket(StackPane ticket) {
+		// Remove last ticket from raffleList
+		raffleList.remove(raffleList.size()-1);
+		// Update header values
+		ticketsRemaining++;
+		ticketsDrawn--;
+		if (raffleList.size() > 0) {
+			lastTicketDrawn = raffleList.get(raffleList.size()-1);
+		} else {
+			lastTicketDrawn = 0;
+		}
+		// Makes StackPane visible
+		ticket.setVisible(true);
 	}
 
 	/* refreshHeader
