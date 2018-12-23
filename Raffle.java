@@ -1,7 +1,6 @@
 // General to do:
 // TODO: Splash screen
 // TODO: Menu Bar
-// TODO: Undo button
 // TODO: Responsive to window resize
 // TODO: Change to grid pane?
 // TODO: User input of ticketNames file
