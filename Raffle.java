@@ -142,6 +142,7 @@ public class Raffle extends Application {
 		}
 		rows.getChildren().addAll(ticketCols);
 
+
 		// Implementing textField onKeyPressed
 		textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent ke) {
