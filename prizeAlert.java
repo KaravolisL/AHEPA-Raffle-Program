@@ -5,10 +5,13 @@ import javafx.scene.layout.*;
 import javafx.geometry.*;
 import javafx.scene.paint.*;
 import javafx.scene.shape.*;
+import javafx.scene.input.*;
 import javafx.animation.PauseTransition;
 import java.io.*;
 import java.util.*;
 import javafx.util.Duration;
+import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 
 public class prizeAlert {
       public static int waitTime = 4;
@@ -39,6 +42,12 @@ public class prizeAlert {
             PauseTransition delay = new PauseTransition(Duration.seconds(waitTime));
             delay.setOnFinished(e -> window.close());
             window.show();
+            // Allows user to close winodw by pressing any key
+            scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                  public void handle(KeyEvent ke) {
+                        window.close();
+                  }
+            });
             delay.play();
       }
 }
