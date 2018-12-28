@@ -71,9 +71,14 @@ public class Raffle extends Application {
 		Menu fileMenu = new Menu("File");
 		Menu viewMenu = new Menu("View");
 		Menu helpMenu = new Menu("Help");
-		// Creating menu items
+		// Creating viewMenu items
+		MenuItem viewFullScreen = new MenuItem("Full Screen");
+		MenuItem viewTicketNames = new MenuItem("Ticket Names");
+		// Creating helpMenu items
 		MenuItem about = new MenuItem("About");
-		// Adding menu items
+		// Adding viewMenu items
+		viewMenu.getItems().addAll(viewFullScreen, viewTicketNames);
+		// Adding helpMenu items
 		helpMenu.getItems().add(about);
 		// Creating Menu Bar
 		MenuBar menuBar = new MenuBar();
@@ -82,6 +87,7 @@ public class Raffle extends Application {
 		BorderPane menuLayout = new BorderPane();
 		menuLayout.setTop(menuBar);
 		// Functionality for menuItems
+		viewTicketNames.setOnAction(e -> viewTicketNamesWindow.display());
 		about.setOnAction(e -> aboutWindow.display());
 		// Creating row of headers
 		Rectangle ticketsRemainingRect = new Rectangle(screenWidth/3, screenHeight/17);
