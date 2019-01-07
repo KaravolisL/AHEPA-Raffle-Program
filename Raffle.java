@@ -25,6 +25,8 @@ import java.lang.*;
 public class Raffle extends Application {
 
 	public ArrayList<Integer> raffleList = new ArrayList<Integer>(255);
+	public ArrayList<String> ticketNames = new ArrayList<String>();
+	Hashtable<Integer, String> prizeInfo = new Hashtable<Integer, String>(25); // <prizeNumber, prizeDescription>
 	int ticketsRemaining = 225;
 	int ticketsDrawn = 0;
 	int lastTicketDrawn = 0;
@@ -33,16 +35,7 @@ public class Raffle extends Application {
 
 	@Override
 	public void init() throws Exception {
-		super.init();
-	}
-
-
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-
-
 		// Bringing in ticket names
-		ArrayList<String> ticketNames = new ArrayList<String>();
 		BufferedReader inTickets = new BufferedReader(new FileReader("ticketNames.txt"));
 		while (inTickets.ready()) {
 			ticketNames.add(inTickets.readLine());
@@ -52,7 +45,6 @@ public class Raffle extends Application {
 		// TODO: Deal with apostrophes
 
 		// Bringing in the prize information
-		Hashtable<Integer, String> prizeInfo = new Hashtable<Integer, String>(25); // <prizeNumber, prizeDescription>
 		BufferedReader inPrizes = new BufferedReader(new FileReader("prizeInfo.txt"));
 		while (inPrizes.ready()) {
 			String line = inPrizes.readLine();
@@ -62,6 +54,11 @@ public class Raffle extends Application {
 		}
 		inPrizes.close();
 		// TODO: Throw error when file is incorrect format
+	}
+
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
 
 		// Finding screen dimensions
 		Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
@@ -134,6 +131,14 @@ public class Raffle extends Application {
 					 "-fx-background-size: 100% 100%;");
 		rows.getChildren().add(mainTable);
 
+		// Updating table from save file
+		BufferedReader inRaffleList = new BufferedReader(new FileReader("raffleList.txt"));
+		while (inRaffleList.ready()) {
+			removeTicket(ticketLayout[Integer.parseInt(inRaffleList.readLine())]);
+		}
+		refreshHeader(ticketsRemainingText, ticketsDrawnText, lastTicketDrawnText);
+		inRaffleList.close();
+
 		// Implementing textField onKeyPressed
 		textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent ke) {
@@ -187,7 +192,12 @@ public class Raffle extends Application {
 
 	@Override
 	public void stop() throws Exception {
-		super.stop();
+		// Writing raffleList to the save file
+		PrintWriter outRaffleList = new PrintWriter(new File("raffleList.txt"));
+		for (Integer i : raffleList) {
+			outRaffleList.println(i);
+		}
+		outRaffleList.close();
 	}
 
 
