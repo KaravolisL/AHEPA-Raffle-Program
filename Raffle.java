@@ -195,7 +195,7 @@ public class Raffle extends Application {
 		// Writing raffleList to the save file
 		PrintWriter outRaffleList = new PrintWriter(new File("raffleList.txt"));
 		for (Integer i : raffleList) {
-			outRaffleList.println(i);
+			outRaffleList.println(i-1);
 		}
 		outRaffleList.close();
 	}
