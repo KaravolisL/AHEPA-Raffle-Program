@@ -63,7 +63,7 @@ public class Raffle extends Application {
 		inPrizes.close();
 		// TODO: Throw error when file is incorrect format
 
-		// Finding screen dimensions
+		// Finding initial screen dimensions
 		Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
 		double screenHeight = bounds.getMaxY();
 		double screenWidth = bounds.getMaxX();
@@ -89,6 +89,12 @@ public class Raffle extends Application {
 		// Functionality for menuItems
 		viewTicketNames.setOnAction(e -> viewTicketNamesWindow.display());
 		about.setOnAction(e -> aboutWindow.display());
+
+		viewFullScreen.setOnAction(e -> {
+			primaryStage.setFullScreen(true);
+			menuBar.setVisible(false);
+			// resize elements
+		});
 		// Creating row of headers
 		Rectangle ticketsRemainingRect = new Rectangle(screenWidth/3, screenHeight/17);
 		Text ticketsRemainingText = new Text("Tickets Remaining: " + ticketsRemaining);
@@ -199,6 +205,15 @@ public class Raffle extends Application {
 			}
 		});
 
+		// Undoes changes made when going into full screen
+		rows.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			public void handle(KeyEvent ke) {
+				if (ke.getCode() == KeyCode.ESCAPE && !primaryStage.isFullScreen()) {
+					menuBar.setVisible(true);
+				}
+			}
+		});
+
 		// Preparing scene for construction
 		primaryStage.setMaximized(true);
 		primaryStage.setScene(new Scene(rows));
@@ -283,5 +298,11 @@ public class Raffle extends Application {
 		if (prizeInfo.containsKey(ticketsDrawn + 1)) {
 			prizeAlert.display(Integer.toString(ticketsDrawn+1), (String)prizeInfo.get(ticketsDrawn+1));
 		}
+	}
+
+	/*
+	*/
+	public void resize() {
+
 	}
 }
