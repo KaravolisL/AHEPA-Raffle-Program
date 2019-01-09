@@ -16,6 +16,7 @@ import javafx.scene.text.*;
 import javafx.scene.control.*;
 import javafx.scene.paint.*;
 import javafx.scene.input.*;
+import javafx.scene.image.*;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import java.util.*;
@@ -186,6 +187,8 @@ public class Raffle extends Application {
 		primaryStage.setMaximized(true);
 		primaryStage.setScene(new Scene(rows));
 		primaryStage.setTitle("Test");
+		// Setting application icon
+		primaryStage.getIcons().add(new Image("Icon.jpg"));
 		primaryStage.show();
 	}
 
