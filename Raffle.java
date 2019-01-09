@@ -45,7 +45,6 @@ public class Raffle extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
-
 		// Bringing in ticket names
 		ArrayList<String> ticketNames = new ArrayList<String>();
 		BufferedReader inTickets = new BufferedReader(new FileReader("ticketNames.txt"));
@@ -96,30 +95,25 @@ public class Raffle extends Application {
 		about.setOnAction(e -> aboutWindow.display());
 
 		viewFullScreen.setOnAction(e -> {
-			System.out.println("Before: " + scene.getHeight());
 			primaryStage.setFullScreen(true);
-			System.out.println("After: " + scene.getHeight());
 			menuBar.setVisible(false);
 			// resize elements
 			resize();
 		});
 		// Creating row of headers
-		ticketsRemainingRect = new Rectangle(screenWidth/3, screenHeight/17);
+		ticketsRemainingRect = new Rectangle(screenWidth/3, screenHeight/18);
 		Text ticketsRemainingText = new Text("Tickets Remaining: " + ticketsRemaining);
 		// TextField for typing removal placed in the center of ticketRemainingPane
 		TextField textField = new TextField();
 		textField.setOpacity(0);
 		StackPane ticketsRemainingPane = new StackPane(ticketsRemainingRect, ticketsRemainingText, textField);
-		ticketsDrawnRect = new Rectangle(screenWidth/3, screenHeight/17);
+		ticketsDrawnRect = new Rectangle(screenWidth/3, screenHeight/18);
 		Text ticketsDrawnText = new Text("Tickets Drawn: 0");
 		StackPane ticketsDrawnPane = new StackPane(ticketsDrawnRect, ticketsDrawnText);
-		lastTicketDrawnRect = new Rectangle(screenWidth/3, screenHeight/17);
+		lastTicketDrawnRect = new Rectangle(screenWidth/3, screenHeight/18);
 		Text lastTicketDrawnText = new Text("Last Ticket Drawn:  ");
 		StackPane lastTicketDrawnPane = new StackPane(lastTicketDrawnRect, lastTicketDrawnText);
 		HBox header = new HBox(ticketsRemainingPane, ticketsDrawnPane, lastTicketDrawnPane);
-		HBox.setHgrow(ticketsRemainingPane, Priority.ALWAYS);
-		HBox.setHgrow(ticketsDrawnPane, Priority.ALWAYS);
-		HBox.setHgrow(lastTicketDrawnPane, Priority.ALWAYS);
 		VBox rows = new VBox(menuBar, header);
 		// Styling row of headers
 		ticketsRemainingRect.setFill(BACKGROUND_COLOR);
@@ -140,7 +134,7 @@ public class Raffle extends Application {
 		int counter = 0;
 		for (int i = 0; i < 225; i++) {
 			// Creating and styling rectangles
-			tickets[i] = new Rectangle(screenWidth/15,screenHeight/17);
+			tickets[i] = new Rectangle(screenWidth/15.2,screenHeight/17.2);
 			tickets[i].setFill(BACKGROUND_COLOR);
 			tickets[i].setStroke(BORDER_COLOR);
 			// Creating and styling text
@@ -167,9 +161,6 @@ public class Raffle extends Application {
 		// Adding rows into separate VBox
 		VBox mainTable = new VBox();
 		mainTable.getChildren().addAll(ticketCols);
-		for (int i = 0; i < 15; i++) {
-			VBox.setVgrow(ticketCols[i], Priority.ALWAYS);
-		}
 		// Adding the background image
 		mainTable.setStyle("-fx-background-image: url('Logo.jpg') no-repeat center center fixed;" +
 					 "-fx-background-size: 100% 100%;");
@@ -223,6 +214,7 @@ public class Raffle extends Application {
 			public void handle(KeyEvent ke) {
 				if (ke.getCode() == KeyCode.ESCAPE && !primaryStage.isFullScreen()) {
 					menuBar.setVisible(true);
+					resize();
 				}
 			}
 		});
@@ -319,16 +311,15 @@ public class Raffle extends Application {
 	public void resize() {
 		double screenHeight = scene.getHeight();
 		double screenWidth = scene.getWidth();
-		System.out.println("In here: " + screenHeight);
 		ticketsRemainingRect.setWidth(screenWidth/3);
-		ticketsRemainingRect.setHeight(screenHeight/17);
+		ticketsRemainingRect.setHeight(screenHeight/15);
 		ticketsDrawnRect.setWidth(screenWidth/3);
 		lastTicketDrawnRect.setWidth(screenWidth/3);
-		ticketsDrawnRect.setHeight(screenHeight/17);
-		lastTicketDrawnRect.setHeight(screenHeight/17);
+		ticketsDrawnRect.setHeight(screenHeight/15);
+		lastTicketDrawnRect.setHeight(screenHeight/15);
 		for (int i = 0; i < 225; i++) {
-			tickets[0].setWidth(screenWidth/15);
-			tickets[0].setHeight(screenHeight/17);
+			tickets[i].setWidth(screenWidth/15.2);
+			tickets[i].setHeight(screenHeight/16.9);
 		}
 	}
 }
