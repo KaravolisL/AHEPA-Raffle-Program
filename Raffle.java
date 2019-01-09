@@ -24,12 +24,17 @@ import java.lang.*;
 
 public class Raffle extends Application {
 
+	public Scene scene;
+
 	public ArrayList<Integer> raffleList = new ArrayList<Integer>(255);
 	int ticketsRemaining = 225;
 	int ticketsDrawn = 0;
 	int lastTicketDrawn = 0;
 	public final Paint BACKGROUND_COLOR = Color.WHITE;
 	public final Paint BORDER_COLOR = Color.BLACK;
+
+	public Rectangle ticketsRemainingRect, ticketsDrawnRect, lastTicketDrawnRect;
+	public Rectangle[] tickets = new Rectangle[225];
 
 	@Override
 	public void init() throws Exception {
@@ -91,24 +96,30 @@ public class Raffle extends Application {
 		about.setOnAction(e -> aboutWindow.display());
 
 		viewFullScreen.setOnAction(e -> {
+			System.out.println("Before: " + scene.getHeight());
 			primaryStage.setFullScreen(true);
+			System.out.println("After: " + scene.getHeight());
 			menuBar.setVisible(false);
 			// resize elements
+			resize();
 		});
 		// Creating row of headers
-		Rectangle ticketsRemainingRect = new Rectangle(screenWidth/3, screenHeight/17);
+		ticketsRemainingRect = new Rectangle(screenWidth/3, screenHeight/17);
 		Text ticketsRemainingText = new Text("Tickets Remaining: " + ticketsRemaining);
 		// TextField for typing removal placed in the center of ticketRemainingPane
 		TextField textField = new TextField();
 		textField.setOpacity(0);
 		StackPane ticketsRemainingPane = new StackPane(ticketsRemainingRect, ticketsRemainingText, textField);
-		Rectangle ticketsDrawnRect = new Rectangle(screenWidth/3, screenHeight/17);
+		ticketsDrawnRect = new Rectangle(screenWidth/3, screenHeight/17);
 		Text ticketsDrawnText = new Text("Tickets Drawn: 0");
 		StackPane ticketsDrawnPane = new StackPane(ticketsDrawnRect, ticketsDrawnText);
-		Rectangle lastTicketDrawnRect = new Rectangle(screenWidth/3, screenHeight/17);
+		lastTicketDrawnRect = new Rectangle(screenWidth/3, screenHeight/17);
 		Text lastTicketDrawnText = new Text("Last Ticket Drawn:  ");
 		StackPane lastTicketDrawnPane = new StackPane(lastTicketDrawnRect, lastTicketDrawnText);
 		HBox header = new HBox(ticketsRemainingPane, ticketsDrawnPane, lastTicketDrawnPane);
+		HBox.setHgrow(ticketsRemainingPane, Priority.ALWAYS);
+		HBox.setHgrow(ticketsDrawnPane, Priority.ALWAYS);
+		HBox.setHgrow(lastTicketDrawnPane, Priority.ALWAYS);
 		VBox rows = new VBox(menuBar, header);
 		// Styling row of headers
 		ticketsRemainingRect.setFill(BACKGROUND_COLOR);
@@ -118,7 +129,6 @@ public class Raffle extends Application {
 		lastTicketDrawnRect.setFill(BACKGROUND_COLOR);
 		lastTicketDrawnRect.setStroke(BORDER_COLOR);
 		// Initializing arrays of elements
-		Rectangle[] tickets = new Rectangle[225];
 		Text[] ticketText = new Text[225];
 		StackPane[] ticketLayout = new StackPane[225];
 		HBox[] ticketCols = new HBox[15];
@@ -157,6 +167,9 @@ public class Raffle extends Application {
 		// Adding rows into separate VBox
 		VBox mainTable = new VBox();
 		mainTable.getChildren().addAll(ticketCols);
+		for (int i = 0; i < 15; i++) {
+			VBox.setVgrow(ticketCols[i], Priority.ALWAYS);
+		}
 		// Adding the background image
 		mainTable.setStyle("-fx-background-image: url('Logo.jpg') no-repeat center center fixed;" +
 					 "-fx-background-size: 100% 100%;");
@@ -216,7 +229,8 @@ public class Raffle extends Application {
 
 		// Preparing scene for construction
 		primaryStage.setMaximized(true);
-		primaryStage.setScene(new Scene(rows));
+		scene = new Scene(rows);
+		primaryStage.setScene(scene);
 		primaryStage.setTitle("Test");
 		primaryStage.show();
 	}
@@ -303,6 +317,18 @@ public class Raffle extends Application {
 	/*
 	*/
 	public void resize() {
-
+		double screenHeight = scene.getHeight();
+		double screenWidth = scene.getWidth();
+		System.out.println("In here: " + screenHeight);
+		ticketsRemainingRect.setWidth(screenWidth/3);
+		ticketsRemainingRect.setHeight(screenHeight/17);
+		ticketsDrawnRect.setWidth(screenWidth/3);
+		lastTicketDrawnRect.setWidth(screenWidth/3);
+		ticketsDrawnRect.setHeight(screenHeight/17);
+		lastTicketDrawnRect.setHeight(screenHeight/17);
+		for (int i = 0; i < 225; i++) {
+			tickets[0].setWidth(screenWidth/15);
+			tickets[0].setHeight(screenHeight/17);
+		}
 	}
 }
