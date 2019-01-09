@@ -35,6 +35,7 @@ public class Raffle extends Application {
 
 	public Rectangle ticketsRemainingRect, ticketsDrawnRect, lastTicketDrawnRect;
 	public Rectangle[] tickets = new Rectangle[225];
+	VBox rows;
 
 	@Override
 	public void init() throws Exception {
@@ -87,9 +88,6 @@ public class Raffle extends Application {
 		// Creating Menu Bar
 		MenuBar menuBar = new MenuBar();
 		menuBar.getMenus().addAll(fileMenu, viewMenu, helpMenu);
-		// Creating layout for Menu
-		BorderPane menuLayout = new BorderPane();
-		menuLayout.setTop(menuBar);
 		// Functionality for menuItems
 		viewTicketNames.setOnAction(e -> viewTicketNamesWindow.display());
 		about.setOnAction(e -> aboutWindow.display());
@@ -98,7 +96,8 @@ public class Raffle extends Application {
 			primaryStage.setFullScreen(true);
 			menuBar.setVisible(false);
 			// resize elements
-			resize();
+			rows.getChildren().remove(menuBar);
+			resize(true);
 		});
 		// Creating row of headers
 		ticketsRemainingRect = new Rectangle(screenWidth/3, screenHeight/18);
@@ -114,7 +113,7 @@ public class Raffle extends Application {
 		Text lastTicketDrawnText = new Text("Last Ticket Drawn:  ");
 		StackPane lastTicketDrawnPane = new StackPane(lastTicketDrawnRect, lastTicketDrawnText);
 		HBox header = new HBox(ticketsRemainingPane, ticketsDrawnPane, lastTicketDrawnPane);
-		VBox rows = new VBox(menuBar, header);
+		rows = new VBox(menuBar, header);
 		// Styling row of headers
 		ticketsRemainingRect.setFill(BACKGROUND_COLOR);
 		ticketsRemainingRect.setStroke(BORDER_COLOR);
@@ -214,7 +213,10 @@ public class Raffle extends Application {
 			public void handle(KeyEvent ke) {
 				if (ke.getCode() == KeyCode.ESCAPE && !primaryStage.isFullScreen()) {
 					menuBar.setVisible(true);
-					resize();
+					try {
+						rows.getChildren().add(0, menuBar);
+					} catch (Exception e) {} // Catches error of adding a node back in
+					resize(false);
 				}
 			}
 		});
@@ -225,6 +227,7 @@ public class Raffle extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Test");
 		primaryStage.show();
+		resize(false);
 	}
 
 
@@ -308,18 +311,28 @@ public class Raffle extends Application {
 
 	/*
 	*/
-	public void resize() {
+	public void resize(boolean forFullScreen) {
 		double screenHeight = scene.getHeight();
 		double screenWidth = scene.getWidth();
 		ticketsRemainingRect.setWidth(screenWidth/3);
-		ticketsRemainingRect.setHeight(screenHeight/15);
 		ticketsDrawnRect.setWidth(screenWidth/3);
 		lastTicketDrawnRect.setWidth(screenWidth/3);
-		ticketsDrawnRect.setHeight(screenHeight/15);
-		lastTicketDrawnRect.setHeight(screenHeight/15);
-		for (int i = 0; i < 225; i++) {
-			tickets[i].setWidth(screenWidth/15.2);
-			tickets[i].setHeight(screenHeight/16.9);
+		if (forFullScreen) {
+			ticketsRemainingRect.setHeight(screenHeight/15);
+			ticketsDrawnRect.setHeight(screenHeight/15);
+			lastTicketDrawnRect.setHeight(screenHeight/15);
+			for (int i = 0; i < 225; i++) {
+				tickets[i].setWidth(screenWidth/15.2);
+				tickets[i].setHeight(screenHeight/16.5);
+			}
+		} else {
+			ticketsRemainingRect.setHeight(screenHeight/15);
+			ticketsDrawnRect.setHeight(screenHeight/15);
+			lastTicketDrawnRect.setHeight(screenHeight/15);
+			for (int i = 0; i < 225; i++) {
+				tickets[i].setWidth(screenWidth/15.2);
+				tickets[i].setHeight(screenHeight/17);
+			}
 		}
 	}
 }
