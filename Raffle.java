@@ -36,6 +36,7 @@ public class Raffle extends Application {
 	public Rectangle ticketsRemainingRect, ticketsDrawnRect, lastTicketDrawnRect;
 	public Rectangle[] tickets = new Rectangle[225];
 	VBox rows;
+	public StackPane[] ticketLayout = new StackPane[225];
 
 	@Override
 	public void init() throws Exception {
@@ -76,11 +77,15 @@ public class Raffle extends Application {
 		Menu fileMenu = new Menu("File");
 		Menu viewMenu = new Menu("View");
 		Menu helpMenu = new Menu("Help");
+		// Creating fileMenu items
+		MenuItem restart = new MenuItem("Restart");
 		// Creating viewMenu items
 		MenuItem viewFullScreen = new MenuItem("Full Screen");
 		MenuItem viewTicketNames = new MenuItem("Ticket Names");
 		// Creating helpMenu items
 		MenuItem about = new MenuItem("About");
+		// Adding fileMenu items
+		fileMenu.getItems().add(restart);
 		// Adding viewMenu items
 		viewMenu.getItems().addAll(viewFullScreen, viewTicketNames);
 		// Adding helpMenu items
@@ -91,13 +96,14 @@ public class Raffle extends Application {
 		// Functionality for menuItems
 		viewTicketNames.setOnAction(e -> viewTicketNamesWindow.display());
 		about.setOnAction(e -> aboutWindow.display());
-
 		viewFullScreen.setOnAction(e -> {
 			primaryStage.setFullScreen(true);
-			menuBar.setVisible(false);
-			// resize elements
 			rows.getChildren().remove(menuBar);
 			resize(true);
+		});
+		restart.setOnAction(e -> {
+			boolean answer = warningWindow.display("Restarting the raffle will cause all progress to be lost. Are you sure?");
+			if (answer) restartRaffle();
 		});
 		// Creating row of headers
 		ticketsRemainingRect = new Rectangle(screenWidth/3, screenHeight/18);
@@ -123,7 +129,6 @@ public class Raffle extends Application {
 		lastTicketDrawnRect.setStroke(BORDER_COLOR);
 		// Initializing arrays of elements
 		Text[] ticketText = new Text[225];
-		StackPane[] ticketLayout = new StackPane[225];
 		HBox[] ticketCols = new HBox[15];
 		// Sets up ticketCols array
 		for (int i = 0; i < 15; i++) {
@@ -212,7 +217,6 @@ public class Raffle extends Application {
 		rows.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent ke) {
 				if (ke.getCode() == KeyCode.ESCAPE && !primaryStage.isFullScreen()) {
-					menuBar.setVisible(true);
 					try {
 						rows.getChildren().add(0, menuBar);
 					} catch (Exception e) {} // Catches error of adding a node back in
@@ -323,7 +327,7 @@ public class Raffle extends Application {
 			lastTicketDrawnRect.setHeight(screenHeight/15);
 			for (int i = 0; i < 225; i++) {
 				tickets[i].setWidth(screenWidth/15.2);
-				tickets[i].setHeight(screenHeight/16.5);
+				tickets[i].setHeight(screenHeight/16.4);
 			}
 		} else {
 			ticketsRemainingRect.setHeight(screenHeight/15);
@@ -334,5 +338,18 @@ public class Raffle extends Application {
 				tickets[i].setHeight(screenHeight/17);
 			}
 		}
+	}
+
+	/* restartRaffle
+	* Occurs only after user selects yes in a warning window.
+	* Makes all tickets visible and clears the raffleList
+	*/
+	public void restartRaffle() {
+		// Making each ticket visible
+		for (Integer i : raffleList) {
+			ticketLayout[i-1].setVisible(true);
+		}
+		// Clearing raffleList
+		raffleList.clear();
 	}
 }
