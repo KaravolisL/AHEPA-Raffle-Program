@@ -313,7 +313,11 @@ public class Raffle extends Application {
 		}
 	}
 
-	/*
+	/* resize
+	* Finds the width and height of the screen. Sizes the elements 
+	* accordingly based on whether or not the app is full screen
+	*
+	* @param forFullScreen a boolean descibing the state of the app
 	*/
 	public void resize(boolean forFullScreen) {
 		double screenHeight = scene.getHeight();
