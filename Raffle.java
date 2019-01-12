@@ -81,13 +81,14 @@ public class Raffle extends Application {
 		MenuItem restart = new MenuItem("Restart");
 		// Creating viewMenu items
 		MenuItem viewFullScreen = new MenuItem("Full Screen");
+		MenuItem viewMaximized = new MenuItem("Maximize");
 		MenuItem viewTicketNames = new MenuItem("Ticket Names");
 		// Creating helpMenu items
 		MenuItem about = new MenuItem("About");
 		// Adding fileMenu items
 		fileMenu.getItems().add(restart);
 		// Adding viewMenu items
-		viewMenu.getItems().addAll(viewFullScreen, viewTicketNames);
+		viewMenu.getItems().addAll(viewFullScreen, viewMaximized, viewTicketNames);
 		// Adding helpMenu items
 		helpMenu.getItems().add(about);
 		// Creating Menu Bar
@@ -101,6 +102,10 @@ public class Raffle extends Application {
 			primaryStage.setFullScreen(true);
 			rows.getChildren().remove(menuBar);
 			resize(true);
+		});
+		viewMaximized.setOnAction(e -> {
+			primaryStage.setMaximized(true);
+			resize(false);
 		});
 		restart.setOnAction(e -> {
 			boolean answer = warningWindow.display("Restarting the raffle will cause all progress to be lost. Are you sure?");
