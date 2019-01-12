@@ -18,6 +18,7 @@ import javafx.scene.input.*;
 import javafx.scene.image.*;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
+import javafx.beans.value.*;
 import java.util.*;
 import java.io.*;
 import java.lang.*;
@@ -79,17 +80,19 @@ public class Raffle extends Application {
 		MenuItem restart = new MenuItem("Restart");
 		// Creating viewMenu items
 		MenuItem viewFullScreen = new MenuItem("Full Screen");
+		MenuItem viewMaximized = new MenuItem("Maximize");
 		MenuItem viewTicketNames = new MenuItem("Ticket Names");
 		// Creating helpMenu items
 		MenuItem about = new MenuItem("About");
 		// Adding fileMenu items
 		fileMenu.getItems().add(restart);
 		// Adding viewMenu items
-		viewMenu.getItems().addAll(viewFullScreen, viewTicketNames);
+		viewMenu.getItems().addAll(viewFullScreen, viewMaximized, viewTicketNames);
 		// Adding helpMenu items
 		helpMenu.getItems().add(about);
 		// Creating Menu Bar
 		MenuBar menuBar = new MenuBar();
+		menuBar.setMaxHeight(25.3333);
 		menuBar.getMenus().addAll(fileMenu, viewMenu, helpMenu);
 		// Functionality for menuItems
 		viewTicketNames.setOnAction(e -> viewTicketNamesWindow.display());
@@ -98,6 +101,10 @@ public class Raffle extends Application {
 			primaryStage.setFullScreen(true);
 			rows.getChildren().remove(menuBar);
 			resize(true);
+		});
+		viewMaximized.setOnAction(e -> {
+			primaryStage.setMaximized(true);
+			resize(false);
 		});
 		restart.setOnAction(e -> {
 			boolean answer = warningWindow.display("Restarting the raffle will cause all progress to be lost. Are you sure?");
@@ -115,6 +122,7 @@ public class Raffle extends Application {
 		StackPane lastTicketDrawnPane = new StackPane(lastTicketDrawnRect, lastTicketDrawnText);
 		HBox header = new HBox(ticketsRemainingPane, ticketsDrawnPane, lastTicketDrawnPane);
 		rows = new VBox(menuBar, header);
+		header.prefHeightProperty().bind(rows.heightProperty());
 		// Styling row of headers
 		ticketsRemainingRect.setFill(BACKGROUND_COLOR);
 		ticketsRemainingRect.setStroke(BORDER_COLOR);
@@ -128,12 +136,13 @@ public class Raffle extends Application {
 		// Sets up ticketCols array
 		for (int i = 0; i < 15; i++) {
 			ticketCols[i] = new HBox();
+			ticketCols[i].prefHeightProperty().bind(rows.heightProperty());
 		}
 		// Creates table of tickets
 		int counter = 0;
 		for (int i = 0; i < 225; i++) {
 			// Creating and styling rectangles
-			tickets[i] = new Rectangle(screenWidth/15.2,screenHeight/17.2);
+			tickets[i] = new Rectangle();
 			tickets[i].setFill(BACKGROUND_COLOR);
 			tickets[i].setStroke(BORDER_COLOR);
 			// Creating and styling text
@@ -164,7 +173,7 @@ public class Raffle extends Application {
 		mainTable.setStyle("-fx-background-image: url('Logo.jpg') no-repeat center center fixed;" +
 					 "-fx-background-size: 100% 100%;");
 		rows.getChildren().add(mainTable);
-
+		rows.setStyle("-fx-border-color: RED;");
 		// Updating table from save file
 		BufferedReader inRaffleList = new BufferedReader(new FileReader("raffleList.txt"));
 		while (inRaffleList.ready()) {
@@ -230,6 +239,7 @@ public class Raffle extends Application {
 
 		// Preparing scene for construction
 		primaryStage.setMaximized(true);
+		primaryStage.resizableProperty().setValue(Boolean.FALSE);
 		scene = new Scene(rows);
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Test");
