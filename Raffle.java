@@ -19,6 +19,7 @@ import javafx.scene.input.*;
 import javafx.scene.image.*;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
+import javafx.beans.value.*;
 import java.util.*;
 import java.io.*;
 import java.lang.*;
@@ -226,7 +227,7 @@ public class Raffle extends Application {
 		// Undoes changes made when going into full screen
 		rows.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent ke) {
-				if (ke.getCode() == KeyCode.ESCAPE && primaryStage.isFullScreen()) {
+				if (ke.getCode() == KeyCode.ESCAPE && !primaryStage.isFullScreen()) {
 					try {
 						rows.getChildren().add(0, menuBar);
 					} catch (Exception e) {} // Catches error of adding a node back in
@@ -235,19 +236,9 @@ public class Raffle extends Application {
 			}
 		});
 
-		rows.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			public void handle(KeyEvent ke) {
-				if (ke.getCode() == KeyCode.ALT) {
-					resize(false);
-				}
-				if (ke.getCode() == KeyCode.CONTROL) {
-					resize(true);
-				}
-			}
-		});
-
 		// Preparing scene for construction
 		primaryStage.setMaximized(true);
+		primaryStage.resizableProperty().setValue(Boolean.FALSE);
 		scene = new Scene(rows);
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Test");
