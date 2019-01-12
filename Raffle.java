@@ -1,6 +1,7 @@
 // General to do:
 // TODO: Splash screen
-// TODO: Responsive to window resize
+// TODO: User input of colors
+// TODO: Fix bug of full screen prize alert 
 // TODO: Change to grid pane?
 // TODO: User input of ticketNames file
 // TODO: User input of prize info
