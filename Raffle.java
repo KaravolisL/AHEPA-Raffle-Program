@@ -1,6 +1,5 @@
 // General to do:
 // TODO: Splash screen
-// TODO: Menu Bar
 // TODO: Responsive to window resize
 // TODO: Change to grid pane?
 // TODO: User input of ticketNames file
@@ -30,9 +29,9 @@ public class Raffle extends Application {
 	public ArrayList<Integer> raffleList = new ArrayList<Integer>(255);
 	public ArrayList<String> ticketNames = new ArrayList<String>();
 	Hashtable<Integer, String> prizeInfo = new Hashtable<Integer, String>(25); // <prizeNumber, prizeDescription>
-	int ticketsRemaining = 225;
-	int ticketsDrawn = 0;
-	int lastTicketDrawn = 0;
+	public Text ticketsRemainingText = new Text("Tickets Remaining: " + (225-raffleList.size()));
+	public Text ticketsDrawnText = new Text("Tickets Drawn: 0");
+	public Text lastTicketDrawnText = new Text("Last Ticket Drawn:  ");
 	public final Paint BACKGROUND_COLOR = Color.WHITE;
 	public final Paint BORDER_COLOR = Color.BLACK;
 
@@ -106,16 +105,13 @@ public class Raffle extends Application {
 		});
 		// Creating row of headers
 		ticketsRemainingRect = new Rectangle(screenWidth/3, screenHeight/18);
-		Text ticketsRemainingText = new Text("Tickets Remaining: " + ticketsRemaining);
 		// TextField for typing removal placed in the center of ticketRemainingPane
 		TextField textField = new TextField();
 		textField.setOpacity(0);
 		StackPane ticketsRemainingPane = new StackPane(ticketsRemainingRect, ticketsRemainingText, textField);
 		ticketsDrawnRect = new Rectangle(screenWidth/3, screenHeight/18);
-		Text ticketsDrawnText = new Text("Tickets Drawn: 0");
 		StackPane ticketsDrawnPane = new StackPane(ticketsDrawnRect, ticketsDrawnText);
 		lastTicketDrawnRect = new Rectangle(screenWidth/3, screenHeight/18);
-		Text lastTicketDrawnText = new Text("Last Ticket Drawn:  ");
 		StackPane lastTicketDrawnPane = new StackPane(lastTicketDrawnRect, lastTicketDrawnText);
 		HBox header = new HBox(ticketsRemainingPane, ticketsDrawnPane, lastTicketDrawnPane);
 		rows = new VBox(menuBar, header);
@@ -153,7 +149,7 @@ public class Raffle extends Application {
 			final int ticketNumber = i;
 			ticketLayout[i].setOnMousePressed(e -> {
 				removeTicket(ticketLayout[ticketNumber]);
-				refreshHeader(ticketsRemainingText, ticketsDrawnText, lastTicketDrawnText);
+				refreshHeader();
 				prizeCheck(prizeInfo);
 			});
 			// Changing rows
@@ -174,7 +170,7 @@ public class Raffle extends Application {
 		while (inRaffleList.ready()) {
 			removeTicket(ticketLayout[Integer.parseInt(inRaffleList.readLine())]);
 		}
-		refreshHeader(ticketsRemainingText, ticketsDrawnText, lastTicketDrawnText);
+		refreshHeader();
 		inRaffleList.close();
 
 		// Implementing textField onKeyPressed
@@ -193,7 +189,7 @@ public class Raffle extends Application {
 							StackPane chosenTicket = ticketLayout[i-1];
 							if (chosenTicket.isVisible()) {
 								removeTicket(chosenTicket);
-								refreshHeader(ticketsRemainingText, ticketsDrawnText, lastTicketDrawnText);
+								refreshHeader();
 								prizeCheck(prizeInfo);
 							}
 						}
@@ -202,7 +198,7 @@ public class Raffle extends Application {
 						StackPane chosenTicket = ticketLayout[number-1];
 						if (chosenTicket.isVisible()) {
 							removeTicket(chosenTicket);
-							refreshHeader(ticketsRemainingText, ticketsDrawnText, lastTicketDrawnText);
+							refreshHeader();
 							prizeCheck(prizeInfo);
 						}
 					}
@@ -215,7 +211,7 @@ public class Raffle extends Application {
 		lastTicketDrawnPane.setOnMouseClicked(e -> {
 			if (!raffleList.isEmpty()) {
 				replaceTicket(ticketLayout[raffleList.get(raffleList.size()-1)-1]);
-				refreshHeader(ticketsRemainingText, ticketsDrawnText, lastTicketDrawnText);
+				refreshHeader();
 				prizeCheck(prizeInfo);
 			}
 		});
@@ -268,14 +264,10 @@ public class Raffle extends Application {
 	* @param ticket the StackPane to be removed
 	*/
 	public void removeTicket(StackPane ticket) {
-		// Update header values
-		ticketsRemaining--;
-		ticketsDrawn++;
-		lastTicketDrawn = Integer.parseInt(ticket.getId());
 		// Makes StackPane invisible
 		ticket.setVisible(false);
 		// add ticketNumber to raffleList
-		raffleList.add(lastTicketDrawn);
+		raffleList.add(Integer.parseInt(ticket.getId()));
 	}
 
 	/* replaceTicket
@@ -287,14 +279,6 @@ public class Raffle extends Application {
 	public void replaceTicket(StackPane ticket) {
 		// Remove last ticket from raffleList
 		raffleList.remove(raffleList.size()-1);
-		// Update header values
-		ticketsRemaining++;
-		ticketsDrawn--;
-		if (raffleList.size() > 0) {
-			lastTicketDrawn = raffleList.get(raffleList.size()-1);
-		} else {
-			lastTicketDrawn = 0;
-		}
 		// Makes StackPane visible
 		ticket.setVisible(true);
 	}
@@ -302,15 +286,15 @@ public class Raffle extends Application {
 	/* refreshHeader
 	* This method will update the header in the GUI when a ticket is
 	* removed or replaced
-	*
-	* @param tr Text for ticketsRemaining
-	* @param td Text for ticketsDrawn
-	* @param ltd Text for lastTicketDrawn
 	*/
-	public void refreshHeader(Text tr, Text td, Text ltd) {
-		tr.setText("Tickets Remaining: " + ticketsRemaining);
-		td.setText("Tickets Drawn: " + ticketsDrawn);
-		ltd.setText("Last Ticket Drawn: " + lastTicketDrawn);
+	public void refreshHeader() {
+		ticketsRemainingText.setText("Tickets Remaining: " + (225-raffleList.size()));
+		ticketsDrawnText.setText("Tickets Drawn: " + raffleList.size());
+		if (raffleList.size() == 0) {
+			lastTicketDrawnText.setText("Last Ticket Drawn: 0");
+		} else {
+			lastTicketDrawnText.setText("Last Ticket Drawn: " + raffleList.get(raffleList.size()-1));
+		}
 	}
 
 	/* prizeCheck
@@ -322,8 +306,8 @@ public class Raffle extends Application {
 	* prizeDescription
 	*/
 	public void prizeCheck(Hashtable prizeInfo) {
-		if (prizeInfo.containsKey(ticketsDrawn + 1)) {
-			prizeAlert.display(Integer.toString(ticketsDrawn+1), (String)prizeInfo.get(ticketsDrawn+1));
+		if (prizeInfo.containsKey(raffleList.size() + 1)) {
+			prizeAlert.display(Integer.toString(raffleList.size()+1), (String)prizeInfo.get(raffleList.size()+1));
 		}
 	}
 
@@ -369,5 +353,6 @@ public class Raffle extends Application {
 		}
 		// Clearing raffleList
 		raffleList.clear();
+		refreshHeader();
 	}
 }
