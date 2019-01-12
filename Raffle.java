@@ -91,6 +91,7 @@ public class Raffle extends Application {
 		helpMenu.getItems().add(about);
 		// Creating Menu Bar
 		MenuBar menuBar = new MenuBar();
+		menuBar.setMaxHeight(25.3333);
 		menuBar.getMenus().addAll(fileMenu, viewMenu, helpMenu);
 		// Functionality for menuItems
 		viewTicketNames.setOnAction(e -> viewTicketNamesWindow.display());
@@ -119,6 +120,7 @@ public class Raffle extends Application {
 		StackPane lastTicketDrawnPane = new StackPane(lastTicketDrawnRect, lastTicketDrawnText);
 		HBox header = new HBox(ticketsRemainingPane, ticketsDrawnPane, lastTicketDrawnPane);
 		rows = new VBox(menuBar, header);
+		header.prefWidthProperty().bind(rows.widthProperty());
 		// Styling row of headers
 		ticketsRemainingRect.setFill(BACKGROUND_COLOR);
 		ticketsRemainingRect.setStroke(BORDER_COLOR);
@@ -168,7 +170,7 @@ public class Raffle extends Application {
 		mainTable.setStyle("-fx-background-image: url('Logo.jpg') no-repeat center center fixed;" +
 					 "-fx-background-size: 100% 100%;");
 		rows.getChildren().add(mainTable);
-
+		rows.setStyle("-fx-border-color: RED;");
 		// Updating table from save file
 		BufferedReader inRaffleList = new BufferedReader(new FileReader("raffleList.txt"));
 		while (inRaffleList.ready()) {
