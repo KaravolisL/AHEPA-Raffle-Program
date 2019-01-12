@@ -120,7 +120,7 @@ public class Raffle extends Application {
 		StackPane lastTicketDrawnPane = new StackPane(lastTicketDrawnRect, lastTicketDrawnText);
 		HBox header = new HBox(ticketsRemainingPane, ticketsDrawnPane, lastTicketDrawnPane);
 		rows = new VBox(menuBar, header);
-		header.prefWidthProperty().bind(rows.widthProperty());
+		header.prefHeightProperty().bind(rows.heightProperty());
 		// Styling row of headers
 		ticketsRemainingRect.setFill(BACKGROUND_COLOR);
 		ticketsRemainingRect.setStroke(BORDER_COLOR);
@@ -134,12 +134,13 @@ public class Raffle extends Application {
 		// Sets up ticketCols array
 		for (int i = 0; i < 15; i++) {
 			ticketCols[i] = new HBox();
+			ticketCols[i].prefHeightProperty().bind(rows.heightProperty());
 		}
 		// Creates table of tickets
 		int counter = 0;
 		for (int i = 0; i < 225; i++) {
 			// Creating and styling rectangles
-			tickets[i] = new Rectangle(screenWidth/15.2,screenHeight/17.2);
+			tickets[i] = new Rectangle();
 			tickets[i].setFill(BACKGROUND_COLOR);
 			tickets[i].setStroke(BORDER_COLOR);
 			// Creating and styling text
@@ -225,11 +226,22 @@ public class Raffle extends Application {
 		// Undoes changes made when going into full screen
 		rows.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent ke) {
-				if (ke.getCode() == KeyCode.ESCAPE && !primaryStage.isFullScreen()) {
+				if (ke.getCode() == KeyCode.ESCAPE && primaryStage.isFullScreen()) {
 					try {
 						rows.getChildren().add(0, menuBar);
 					} catch (Exception e) {} // Catches error of adding a node back in
 					resize(false);
+				}
+			}
+		});
+
+		rows.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			public void handle(KeyEvent ke) {
+				if (ke.getCode() == KeyCode.ALT) {
+					resize(false);
+				}
+				if (ke.getCode() == KeyCode.CONTROL) {
+					resize(true);
 				}
 			}
 		});
