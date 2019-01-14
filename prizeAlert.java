@@ -11,7 +11,7 @@ import java.io.*;
 import java.util.*;
 import javafx.util.Duration;
 import javafx.event.EventHandler;
-import javafx.event.ActionEvent; 
+import javafx.event.ActionEvent;
 
 public class prizeAlert {
       public static int waitTime = 4;
