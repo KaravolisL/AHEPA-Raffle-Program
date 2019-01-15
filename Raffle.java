@@ -1,7 +1,6 @@
 // General to do:
 // TODO: Splash screen
 // TODO: User input of colors
-// TODO: Fix bug of full screen prize alert 
 // TODO: Change to grid pane?
 // TODO: User input of ticketNames file
 // TODO: User input of prize info
@@ -20,6 +19,8 @@ import javafx.scene.image.*;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.beans.value.*;
+import javafx.util.Duration;
+import javafx.animation.PauseTransition;
 import java.util.*;
 import java.io.*;
 import java.lang.*;
@@ -41,6 +42,10 @@ public class Raffle extends Application {
 	public Rectangle[] tickets = new Rectangle[225];
 	VBox rows;
 	public StackPane[] ticketLayout = new StackPane[225];
+	public StackPane mainTableStack = new StackPane();
+	public final int WAIT_TIME = 4; // How long the prize alert stays
+
+	// TODO: Comment all the above initializations
 
 	@Override
 	public void init() throws Exception {
@@ -173,7 +178,9 @@ public class Raffle extends Application {
 		// Adding the background image
 		mainTable.setStyle("-fx-background-image: url('Logo.jpg') no-repeat center center fixed;" +
 					 "-fx-background-size: 100% 100%;");
-		rows.getChildren().add(mainTable);
+		// Adding mainTable to mainTableStack so prize alerts can be added
+		mainTableStack.getChildren().add(mainTable);
+		rows.getChildren().add(mainTableStack);
 		rows.setStyle("-fx-border-color: RED;");
 		// Updating table from save file
 		BufferedReader inRaffleList = new BufferedReader(new FileReader("raffleList.txt"));
@@ -310,15 +317,34 @@ public class Raffle extends Application {
 
 	/* prizeCheck
 	* This method will search prizeInfo for the next ticket number. If
-	* The next ticket number is found, a new window will be created that
-	* displays the prizeDescription
+	* The next ticket number is found, a new object will be created which
+	* creates a styled rectangle and text that is displayed on top of
+	* the mainTable. It will disappear after WAIT_TIME or a button is pressed
 	*
-	* @param prizeInfo Hashtable to contains the ticket number and prize
+	* @param prizeInfo Hashtable that contains the ticket number and prize
 	* prizeDescription
 	*/
 	public void prizeCheck(Hashtable prizeInfo) {
 		if (prizeInfo.containsKey(raffleList.size() + 1)) {
-			prizeAlert.display(Integer.toString(raffleList.size()+1), (String)prizeInfo.get(raffleList.size()+1));
+			double screenHeight = scene.getHeight();
+			double screenWidth = scene.getWidth();
+			PrizeAlert alert = new PrizeAlert((String)prizeInfo.get(raffleList.size()+1));
+			alert.setSize(screenWidth/1.5, screenHeight/1.5);
+			PauseTransition delay = new PauseTransition(Duration.seconds(WAIT_TIME));
+	            delay.setOnFinished(e -> {
+				if (alert.visible) {
+					mainTableStack.getChildren().remove(mainTableStack.getChildren().size()-1);
+				}
+			});
+			mainTableStack.getChildren().add(alert.getPane());
+			scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+	                  public void handle(KeyEvent ke) {
+	                        if (alert.visible) {
+						mainTableStack.getChildren().remove(mainTableStack.getChildren().size()-1);
+					}
+	                  }
+	            });
+			delay.play();
 		}
 	}
 
@@ -326,7 +352,7 @@ public class Raffle extends Application {
 	* Finds the width and height of the screen. Sizes the elements
 	* accordingly based on whether or not the app is full screen
 	*
-	* @param forFullScreen a boolean descibing the state of the app
+	* @param forFullScreen a boolean describing the state of the app
 	*/
 	public void resize(boolean forFullScreen) {
 		double screenHeight = scene.getHeight();
