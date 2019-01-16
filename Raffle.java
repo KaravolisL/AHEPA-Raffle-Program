@@ -1,6 +1,5 @@
 // General to do:
 // TODO: Splash screen
-// TODO: User input of colors
 // TODO: Change to grid pane?
 // TODO: User input of ticketNames file
 // TODO: User input of prize info
@@ -34,8 +33,8 @@ public class Raffle extends Application {
 	public Text ticketsRemainingText = new Text("Tickets Remaining: " + (225-raffleList.size()));
 	public Text ticketsDrawnText = new Text("Tickets Drawn: 0");
 	public Text lastTicketDrawnText = new Text("Last Ticket Drawn:  ");
-	public final Paint BACKGROUND_COLOR = Color.WHITE;
-	public final Paint BORDER_COLOR = Color.BLACK;
+	public Paint backgroundColor = Color.WHITE;
+	public Paint borderColor = Color.BLACK;
 	public Rectangle ticketsRemainingRect, ticketsDrawnRect, lastTicketDrawnRect;
 	public Rectangle[] tickets = new Rectangle[225];
 	VBox rows;
@@ -85,13 +84,14 @@ public class Raffle extends Application {
 		// Creating viewMenu items
 		MenuItem viewFullScreen = new MenuItem("Full Screen");
 		MenuItem viewMaximized = new MenuItem("Maximize");
+		MenuItem changeBackgroundColor = new MenuItem("Change Background Color");
 		MenuItem viewTicketNames = new MenuItem("Ticket Names");
 		// Creating helpMenu items
 		MenuItem about = new MenuItem("About");
 		// Adding fileMenu items
 		fileMenu.getItems().add(restart);
 		// Adding viewMenu items
-		viewMenu.getItems().addAll(viewFullScreen, viewMaximized, viewTicketNames);
+		viewMenu.getItems().addAll(viewFullScreen, viewMaximized, changeBackgroundColor, viewTicketNames);
 		// Adding helpMenu items
 		helpMenu.getItems().add(about);
 		// Creating Menu Bar
@@ -99,7 +99,6 @@ public class Raffle extends Application {
 		menuBar.setMaxHeight(25.3333);
 		menuBar.getMenus().addAll(fileMenu, viewMenu, helpMenu);
 		// Functionality for menuItems
-		viewTicketNames.setOnAction(e -> viewTicketNamesWindow.display());
 		about.setOnAction(e -> aboutWindow.display());
 		viewFullScreen.setOnAction(e -> {
 			primaryStage.setFullScreen(true);
@@ -110,6 +109,11 @@ public class Raffle extends Application {
 			primaryStage.setMaximized(true);
 			resize(false);
 		});
+		changeBackgroundColor.setOnAction(e -> {
+			backgroundColor = colorPickerWindow.display();
+			restyle();
+		});
+		viewTicketNames.setOnAction(e -> viewTicketNamesWindow.display());
 		restart.setOnAction(e -> {
 			boolean answer = warningWindow.display("Restarting the raffle will cause all progress to be lost. Are you sure?");
 			if (answer) restartRaffle();
@@ -128,12 +132,12 @@ public class Raffle extends Application {
 		rows = new VBox(menuBar, header);
 		header.prefHeightProperty().bind(rows.heightProperty());
 		// Styling row of headers
-		ticketsRemainingRect.setFill(BACKGROUND_COLOR);
-		ticketsRemainingRect.setStroke(BORDER_COLOR);
-		ticketsDrawnRect.setFill(BACKGROUND_COLOR);
-		ticketsDrawnRect.setStroke(BORDER_COLOR);
-		lastTicketDrawnRect.setFill(BACKGROUND_COLOR);
-		lastTicketDrawnRect.setStroke(BORDER_COLOR);
+		ticketsRemainingRect.setFill(backgroundColor);
+		ticketsRemainingRect.setStroke(borderColor);
+		ticketsDrawnRect.setFill(backgroundColor);
+		ticketsDrawnRect.setStroke(borderColor);
+		lastTicketDrawnRect.setFill(backgroundColor);
+		lastTicketDrawnRect.setStroke(borderColor);
 		// Initializing arrays of elements
 		Text[] ticketText = new Text[225];
 		HBox[] ticketCols = new HBox[15];
@@ -147,8 +151,8 @@ public class Raffle extends Application {
 		for (int i = 0; i < 225; i++) {
 			// Creating and styling rectangles
 			tickets[i] = new Rectangle();
-			tickets[i].setFill(BACKGROUND_COLOR);
-			tickets[i].setStroke(BORDER_COLOR);
+			tickets[i].setFill(backgroundColor);
+			tickets[i].setStroke(borderColor);
 			// Creating and styling text
 			ticketText[i] = new Text((i+1) + "\n" + ticketNames.get(i));
 			ticketText[i].setTextAlignment(TextAlignment.CENTER);
@@ -389,5 +393,21 @@ public class Raffle extends Application {
 		// Clearing raffleList
 		raffleList.clear();
 		refreshHeader();
+	}
+
+	/* restyle
+	* Updates the background color and border color of all components
+	*/
+	public void restyle() {
+		ticketsRemainingRect.setFill(backgroundColor);
+		ticketsRemainingRect.setStroke(borderColor);
+		ticketsDrawnRect.setFill(backgroundColor);
+		ticketsDrawnRect.setStroke(borderColor);
+		lastTicketDrawnRect.setFill(backgroundColor);
+		lastTicketDrawnRect.setStroke(borderColor);
+		for (Rectangle r : tickets) {
+			r.setFill(backgroundColor);
+			r.setStroke(borderColor);
+		}
 	}
 }
