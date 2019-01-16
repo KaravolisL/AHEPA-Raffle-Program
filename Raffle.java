@@ -409,5 +409,6 @@ public class Raffle extends Application {
 			r.setFill(backgroundColor);
 			r.setStroke(borderColor);
 		}
+		PrizeAlert.setColor(backgroundColor);
 	}
 }
