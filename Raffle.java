@@ -28,16 +28,14 @@ import java.lang.*;
 public class Raffle extends Application {
 
 	public Scene scene;
-
-	public ArrayList<Integer> raffleList = new ArrayList<Integer>(255);
-	public ArrayList<String> ticketNames = new ArrayList<String>();
-	Hashtable<Integer, String> prizeInfo = new Hashtable<Integer, String>(25); // <prizeNumber, prizeDescription>
+	public static ArrayList<Integer> raffleList = new ArrayList<Integer>(255);
+	public static ArrayList<String> ticketNames = new ArrayList<String>();
+	public static Hashtable<Integer, String> prizeInfo = new Hashtable<Integer, String>(25); // <prizeNumber, prizeDescription>
 	public Text ticketsRemainingText = new Text("Tickets Remaining: " + (225-raffleList.size()));
 	public Text ticketsDrawnText = new Text("Tickets Drawn: 0");
 	public Text lastTicketDrawnText = new Text("Last Ticket Drawn:  ");
 	public final Paint BACKGROUND_COLOR = Color.WHITE;
 	public final Paint BORDER_COLOR = Color.BLACK;
-
 	public Rectangle ticketsRemainingRect, ticketsDrawnRect, lastTicketDrawnRect;
 	public Rectangle[] tickets = new Rectangle[225];
 	VBox rows;
@@ -45,7 +43,7 @@ public class Raffle extends Application {
 	public StackPane mainTableStack = new StackPane();
 	public final int WAIT_TIME = 4; // How long the prize alert stays
 
-	// TODO: Comment all the above initializations
+	// TODO: Comment and organize all the above initializations
 
 	@Override
 	public void init() throws Exception {
@@ -339,8 +337,8 @@ public class Raffle extends Application {
 			mainTableStack.getChildren().add(alert.getPane());
 			scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 	                  public void handle(KeyEvent ke) {
-	                        if (alert.visible) {
-						mainTableStack.getChildren().remove(mainTableStack.getChildren().size()-1);
+	                        if (mainTableStack.getChildren().size() > 1) {
+						mainTableStack.getChildren().remove(alert.getPane());
 					}
 	                  }
 	            });
