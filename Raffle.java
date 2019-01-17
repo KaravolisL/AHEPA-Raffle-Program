@@ -28,7 +28,7 @@ public class Raffle extends Application {
 
 	public Scene scene;
 	public static ArrayList<Integer> raffleList = new ArrayList<Integer>(255);
-	public static ArrayList<String> ticketNames = new ArrayList<String>();
+	public static ArrayList<Ticket> ticketNames = new ArrayList<Ticket>();
 	public static Hashtable<Integer, String> prizeInfo = new Hashtable<Integer, String>(25); // <prizeNumber, prizeDescription>
 	public Text ticketsRemainingText = new Text("Tickets Remaining: " + (225-raffleList.size()));
 	public Text ticketsDrawnText = new Text("Tickets Drawn: 0");
@@ -48,8 +48,8 @@ public class Raffle extends Application {
 	public void init() throws Exception {
 		// Bringing in ticket names
 		BufferedReader inTickets = new BufferedReader(new FileReader("ticketNames.txt"));
-		while (inTickets.ready()) {
-			ticketNames.add(inTickets.readLine());
+		for (int i = 1; inTickets.ready(); i++) {
+			ticketNames.add(new Ticket(inTickets.readLine(), i));
 		}
 		inTickets.close();
 		// TODO: Throw error when name is too long
@@ -154,7 +154,7 @@ public class Raffle extends Application {
 			tickets[i].setFill(backgroundColor);
 			tickets[i].setStroke(borderColor);
 			// Creating and styling text
-			ticketText[i] = new Text((i+1) + "\n" + ticketNames.get(i));
+			ticketText[i] = new Text((i+1) + "\n" + ticketNames.get(i).getName());
 			ticketText[i].setTextAlignment(TextAlignment.CENTER);
 			ticketText[i].setWrappingWidth(screenWidth/15);
 			// Constructing StackPane
