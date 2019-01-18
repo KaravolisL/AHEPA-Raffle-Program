@@ -18,7 +18,7 @@ public class viewPrizeWindow {
       public static Scene scene;
       public static TableView table = new TableView();
 
-      public void display() {
+      public static void display() {
             window.setTitle("Prizes");
 
             // Setting the window's icon

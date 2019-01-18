@@ -77,30 +77,46 @@ public class Raffle extends Application {
 		double screenWidth = bounds.getMaxX();
 		// Creating Menu
 		Menu fileMenu = new Menu("File");
+		Menu editMenu = new Menu("Edit");
 		Menu viewMenu = new Menu("View");
 		Menu helpMenu = new Menu("Help");
 		// Creating fileMenu items
 		MenuItem restart = new MenuItem("Restart");
+		// Creating editMenu items
+		MenuItem editTicket = new MenuItem("Edit Ticket");
+		MenuItem editPrize = new MenuItem("Edit Prize");
+		MenuItem changeBackgroundColor = new MenuItem("Change Background Color");
 		// Creating viewMenu items
 		MenuItem viewFullScreen = new MenuItem("Full Screen");
 		MenuItem viewMaximized = new MenuItem("Maximize");
-		MenuItem changeBackgroundColor = new MenuItem("Change Background Color");
 		MenuItem viewTicketNames = new MenuItem("Ticket Names");
 		MenuItem viewPrizes = new MenuItem("Prizes");
 		// Creating helpMenu items
 		MenuItem about = new MenuItem("About");
 		// Adding fileMenu items
 		fileMenu.getItems().add(restart);
+		// Adding editMenu items
+		editMenu.getItems().addAll(editTicket, editPrize, changeBackgroundColor);
 		// Adding viewMenu items
-		viewMenu.getItems().addAll(viewFullScreen, viewMaximized, changeBackgroundColor, viewTicketNames, viewPrizes);
+		viewMenu.getItems().addAll(viewFullScreen, viewMaximized, new SeparatorMenuItem(), viewTicketNames, viewPrizes);
 		// Adding helpMenu items
 		helpMenu.getItems().add(about);
 		// Creating Menu Bar
 		MenuBar menuBar = new MenuBar();
 		menuBar.setMaxHeight(25.3333);
-		menuBar.getMenus().addAll(fileMenu, viewMenu, helpMenu);
+		menuBar.getMenus().addAll(fileMenu, editMenu, viewMenu, helpMenu);
 		// Functionality for menuItems
+		restart.setOnAction(e -> {
+			boolean answer = warningWindow.display("Restarting the raffle will cause all progress to be lost. Are you sure?");
+			if (answer) restartRaffle();
+		});
 		about.setOnAction(e -> aboutWindow.display());
+		//editTicket.setOnAction(e -> editTicketWindow.display());
+		//editPrize.setOnAction(e -> editPrizeWindow.display());
+		changeBackgroundColor.setOnAction(e -> {
+			backgroundColor = colorPickerWindow.display();
+			restyle();
+		});
 		viewFullScreen.setOnAction(e -> {
 			primaryStage.setFullScreen(true);
 			rows.getChildren().remove(menuBar);
@@ -110,16 +126,8 @@ public class Raffle extends Application {
 			primaryStage.setMaximized(true);
 			resize(false);
 		});
-		changeBackgroundColor.setOnAction(e -> {
-			backgroundColor = colorPickerWindow.display();
-			restyle();
-		});
 		viewTicketNames.setOnAction(e -> viewTicketNamesWindow.display());
-		//viewPrizes.setOnAction(e -> viewPrizesWindow.display());
-		restart.setOnAction(e -> {
-			boolean answer = warningWindow.display("Restarting the raffle will cause all progress to be lost. Are you sure?");
-			if (answer) restartRaffle();
-		});
+		viewPrizes.setOnAction(e -> viewPrizeWindow.display());
 		// Creating row of headers
 		ticketsRemainingRect = new Rectangle(screenWidth/3, screenHeight/18);
 		// TextField for typing removal placed in the center of ticketRemainingPane
