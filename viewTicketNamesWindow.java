@@ -8,6 +8,7 @@ import javafx.scene.shape.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.collections.*;
+import javafx.scene.image.*;
 import java.io.*;
 import java.util.*;
 
@@ -44,6 +45,8 @@ public class viewTicketNamesWindow {
             ticketNumber.setMaxWidth(screenWidth/4);
             window.setScene(scene);
             window.setResizable(false);
+            // Setting the window's icon
+            window.getIcons().add(new Image("Icon.jpg"));
             window.showAndWait();
       }
 }

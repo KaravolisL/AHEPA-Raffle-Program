@@ -86,12 +86,13 @@ public class Raffle extends Application {
 		MenuItem viewMaximized = new MenuItem("Maximize");
 		MenuItem changeBackgroundColor = new MenuItem("Change Background Color");
 		MenuItem viewTicketNames = new MenuItem("Ticket Names");
+		MenuItem viewPrizes = new MenuItem("Prizes");
 		// Creating helpMenu items
 		MenuItem about = new MenuItem("About");
 		// Adding fileMenu items
 		fileMenu.getItems().add(restart);
 		// Adding viewMenu items
-		viewMenu.getItems().addAll(viewFullScreen, viewMaximized, changeBackgroundColor, viewTicketNames);
+		viewMenu.getItems().addAll(viewFullScreen, viewMaximized, changeBackgroundColor, viewTicketNames, viewPrizes);
 		// Adding helpMenu items
 		helpMenu.getItems().add(about);
 		// Creating Menu Bar
@@ -114,6 +115,7 @@ public class Raffle extends Application {
 			restyle();
 		});
 		viewTicketNames.setOnAction(e -> viewTicketNamesWindow.display());
+		//viewPrizes.setOnAction(e -> viewPrizesWindow.display());
 		restart.setOnAction(e -> {
 			boolean answer = warningWindow.display("Restarting the raffle will cause all progress to be lost. Are you sure?");
 			if (answer) restartRaffle();

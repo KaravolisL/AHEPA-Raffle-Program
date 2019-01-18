@@ -6,6 +6,7 @@ import javafx.geometry.*;
 import javafx.scene.paint.*;
 import javafx.scene.shape.*;
 import javafx.scene.control.*;
+import javafx.scene.image.*;
 import java.io.*;
 import java.util.*;
 
@@ -42,6 +43,8 @@ public class warningWindow {
             Scene scene = new Scene(layout, screenWidth/2, screenHeight/2);
 
             window.setScene(scene);
+            // Setting the window's icon
+            window.getIcons().add(new Image("Icon.jpg"));
             window.showAndWait();
             return answer;
       }

@@ -6,6 +6,7 @@ import javafx.geometry.*;
 import javafx.scene.paint.*;
 import javafx.scene.shape.*;
 import javafx.scene.control.*;
+import javafx.scene.image.*;
 import java.io.*;
 import java.util.*;
 
@@ -29,6 +30,8 @@ public class colorPickerWindow {
             window.setOnCloseRequest(e -> color = myColorPicker.getValue());
 
             window.setScene(scene);
+            // Setting the window's icon
+            window.getIcons().add(new Image("Icon.jpg"));
             window.showAndWait();
             return color;
       }

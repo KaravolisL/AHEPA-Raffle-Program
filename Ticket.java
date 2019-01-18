@@ -1,5 +1,3 @@
-
-
 public class Ticket {
       private String name;
       private int number;
@@ -7,6 +5,11 @@ public class Ticket {
       public Ticket(String name, int number) {
             this.name = name;
             this.number = number;
+      }
+
+      public Ticket() {
+            this.name = null;
+            this.number = 0;
       }
 
       public int getNumber() {
