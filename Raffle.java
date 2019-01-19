@@ -27,9 +27,9 @@ import java.lang.*;
 public class Raffle extends Application {
 
 	public Scene scene;
-	public static ArrayList<Integer> raffleList = new ArrayList<Integer>(255);
-	public static ArrayList<Ticket> ticketNames = new ArrayList<Ticket>();
-	public static Hashtable<Integer, String> prizeInfo = new Hashtable<Integer, String>(25); // <prizeNumber, prizeDescription>
+	public static ArrayList<Integer> raffleList = new ArrayList<Integer>(226);
+	public static ArrayList<Ticket> ticketNames = new ArrayList<Ticket>(226);
+	public static ArrayList<Prize> prizeInfo = new ArrayList<Prize>(30);
 	public Text ticketsRemainingText = new Text("Tickets Remaining: " + (225-raffleList.size()));
 	public Text ticketsDrawnText = new Text("Tickets Drawn: 0");
 	public Text lastTicketDrawnText = new Text("Last Ticket Drawn:  ");
@@ -61,7 +61,7 @@ public class Raffle extends Application {
 			String line = inPrizes.readLine();
 			Integer prizeNumber = Integer.parseInt(line.substring(0, line.indexOf(" ")));
 			String prizeDescription = line.substring(line.indexOf(" "));
-			prizeInfo.put(prizeNumber, prizeDescription);
+			prizeInfo.add(new Prize(prizeNumber, prizeDescription));
 		}
 		inPrizes.close();
 		// TODO: Throw error when file is incorrect format
@@ -177,7 +177,7 @@ public class Raffle extends Application {
 			ticketLayout[i].setOnMousePressed(e -> {
 				removeTicket(ticketLayout[ticketNumber]);
 				refreshHeader();
-				prizeCheck(prizeInfo);
+				prizeCheck();
 			});
 			// Changing rows
 			if (ticketCols[counter].getChildren().size() == 15) {
@@ -219,7 +219,7 @@ public class Raffle extends Application {
 							if (chosenTicket.isVisible()) {
 								removeTicket(chosenTicket);
 								refreshHeader();
-								prizeCheck(prizeInfo);
+								prizeCheck();
 							}
 						}
 					}
@@ -228,7 +228,7 @@ public class Raffle extends Application {
 						if (chosenTicket.isVisible()) {
 							removeTicket(chosenTicket);
 							refreshHeader();
-							prizeCheck(prizeInfo);
+							prizeCheck();
 						}
 					}
 					textField.clear();
@@ -241,7 +241,7 @@ public class Raffle extends Application {
 			if (!raffleList.isEmpty()) {
 				replaceTicket(ticketLayout[raffleList.get(raffleList.size()-1)-1]);
 				refreshHeader();
-				prizeCheck(prizeInfo);
+				prizeCheck();
 			}
 		});
 
@@ -333,30 +333,31 @@ public class Raffle extends Application {
 	* creates a styled rectangle and text that is displayed on top of
 	* the mainTable. It will disappear after WAIT_TIME or a button is pressed
 	*
-	* @param prizeInfo Hashtable that contains the ticket number and prize
-	* prizeDescription
 	*/
-	public void prizeCheck(Hashtable prizeInfo) {
-		if (prizeInfo.containsKey(raffleList.size() + 1)) {
-			double screenHeight = scene.getHeight();
-			double screenWidth = scene.getWidth();
-			PrizeAlert alert = new PrizeAlert((String)prizeInfo.get(raffleList.size()+1));
-			alert.setSize(screenWidth/1.5, screenHeight/1.5);
-			PauseTransition delay = new PauseTransition(Duration.seconds(WAIT_TIME));
-	            delay.setOnFinished(e -> {
-				if (alert.visible) {
-					mainTableStack.getChildren().remove(mainTableStack.getChildren().size()-1);
-				}
-			});
-			mainTableStack.getChildren().add(alert.getPane());
-			scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-	                  public void handle(KeyEvent ke) {
-	                        if (mainTableStack.getChildren().size() > 1) {
-						mainTableStack.getChildren().remove(alert.getPane());
+	public void prizeCheck() {
+		for (Prize p : Raffle.prizeInfo) {
+			if (p.getNumber() == raffleList.size() + 1) {
+				double screenHeight = scene.getHeight();
+				double screenWidth = scene.getWidth();
+				PrizeAlert alert = new PrizeAlert((String)p.getStatement());
+				alert.setSize(screenWidth/1.5, screenHeight/1.5);
+				PauseTransition delay = new PauseTransition(Duration.seconds(WAIT_TIME));
+		            delay.setOnFinished(e -> {
+					if (alert.visible) {
+						mainTableStack.getChildren().remove(mainTableStack.getChildren().size()-1);
 					}
-	                  }
-	            });
-			delay.play();
+				});
+				mainTableStack.getChildren().add(alert.getPane());
+				scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+		                  public void handle(KeyEvent ke) {
+		                        if (mainTableStack.getChildren().size() > 1) {
+							mainTableStack.getChildren().remove(alert.getPane());
+						}
+		                  }
+		            });
+				delay.play();
+				return;
+			}
 		}
 	}
 

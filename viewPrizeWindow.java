@@ -21,6 +21,16 @@ public class viewPrizeWindow {
       public static void display() {
             window.setTitle("Prizes");
 
+
+            StackPane layout = new StackPane();
+
+
+            Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
+		double screenHeight = bounds.getMaxY();
+		double screenWidth = bounds.getMaxX();
+            scene = new Scene(layout, screenWidth/2, screenHeight/2);
+            window.setScene(scene);
+            window.setResizable(false);
             // Setting the window's icon
             window.getIcons().add(new Image("Icon.jpg"));
             window.showAndWait();
