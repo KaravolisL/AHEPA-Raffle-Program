@@ -73,7 +73,6 @@ public class editTicketWindow {
                         Integer tempInput = input;
                         ticketNumberInput.setText("");
                         ticketNumberInput.setText(tempInput.toString());
-                        // Changing the name on the board
                   }
             });
             // Removes failureMessage when new name is typed

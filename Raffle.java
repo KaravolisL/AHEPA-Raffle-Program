@@ -3,6 +3,7 @@
 // TODO: Change to grid pane?
 // TODO: User input of ticketNames file
 // TODO: User input of prize info
+// TODO: Fix sizing once and for all
 
 import javafx.application.Application;
 import javafx.geometry.*;
@@ -85,6 +86,8 @@ public class Raffle extends Application {
 		Menu helpMenu = new Menu("Help");
 		// Creating fileMenu items
 		MenuItem restart = new MenuItem("Restart");
+		MenuItem importTickets = new MenuItem("Import Ticket Names");
+		MenuItem importPrizes = new MenuItem("Import Prizes");
 		// Creating editMenu items
 		MenuItem editTicket = new MenuItem("Edit Ticket");
 		MenuItem editPrize = new MenuItem("Edit Prize");
@@ -97,7 +100,7 @@ public class Raffle extends Application {
 		// Creating helpMenu items
 		MenuItem about = new MenuItem("About");
 		// Adding fileMenu items
-		fileMenu.getItems().add(restart);
+		fileMenu.getItems().addAll(importTickets, importPrizes, restart);
 		// Adding editMenu items
 		editMenu.getItems().addAll(editTicket, editPrize, changeBackgroundColor);
 		// Adding viewMenu items
@@ -115,7 +118,7 @@ public class Raffle extends Application {
 		});
 		about.setOnAction(e -> aboutWindow.display());
 		editTicket.setOnAction(e -> editTicketWindow.display());
-		//editPrize.setOnAction(e -> editPrizeWindow.display());
+		editPrize.setOnAction(e -> editPrizeWindow.display());
 		changeBackgroundColor.setOnAction(e -> {
 			backgroundColor = colorPickerWindow.display();
 			restyle();
@@ -333,8 +336,6 @@ public class Raffle extends Application {
 	* the mainTable. It will disappear after WAIT_TIME or a button is pressed
 	*
 	*/
-	// TODO: write a return arraylist function in Prize class
-	// and use it to replace the loop below
 	public void prizeCheck() {
 		for (Prize p : Raffle.prizeInfo) {
 			if (p.getNumber() == raffleList.size() + 1) {
