@@ -334,6 +334,8 @@ public class Raffle extends Application {
 	* the mainTable. It will disappear after WAIT_TIME or a button is pressed
 	*
 	*/
+	// TODO: write a return arraylist function in Prize class
+	// and use it to replace the loop below
 	public void prizeCheck() {
 		for (Prize p : Raffle.prizeInfo) {
 			if (p.getNumber() == raffleList.size() + 1) {

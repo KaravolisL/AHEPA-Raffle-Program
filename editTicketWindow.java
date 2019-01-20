@@ -27,6 +27,7 @@ public class editTicketWindow {
       public static TextField newTicketNameInput = new TextField();
       public static Button changeButton = new Button("Change");
       public static Label failureMessage = new Label();
+      public static Integer input = 0;
 
       public static void display() {
             window.setTitle("Edit Ticket");
@@ -42,7 +43,6 @@ public class editTicketWindow {
             // Updates currentTicketName while user inputs a ticket number
             ticketNumberInput.textProperty().addListener(new ChangeListener<String>() {
                   public void changed(ObservableValue ov, String s, String s1) {
-                        Integer input;
                         try {
                               input = Integer.parseInt(s1);
                         } catch (Exception e) {
@@ -50,15 +50,36 @@ public class editTicketWindow {
                         }
                         if (s1.isEmpty()) {
                               currentTicketName.setText(" ");
+                              input = 0;
                         } else if (input > 0 && input < 226) {
                               currentTicketName.setText(Raffle.ticketNames.get(input-1).getName());
                         } else {
                               currentTicketName.setText("Invalid Ticket Number");
+                              input = 0;
                         }
                   }
             });
-            //
-
+            // Changing ticket name when button is pressed
+            changeButton.setOnAction(e -> {
+                  String newName = newTicketNameInput.getText();
+                  if (newName.isEmpty()) {
+                        failureMessage.setText("Invalid Ticket Name");
+                  } else {
+                        if (input != 0) {
+                              Raffle.ticketNames.get(input-1).setName(newName);
+                        }
+                        // Work around to update the currentTicketName
+                        Integer tempInput = input;
+                        ticketNumberInput.setText("");
+                        ticketNumberInput.setText(tempInput.toString());
+                  }
+            });
+            // Removes failureMessage when new name is typed
+            newTicketNameInput.textProperty().addListener(new ChangeListener<String>() {
+                  public void changed(ObservableValue ov, String s, String s1) {
+                        failureMessage.setText(" ");
+                  }
+            });
 
             scene = new Scene(layout, 300, 175);
             layout.prefWidthProperty().bind(scene.widthProperty());
