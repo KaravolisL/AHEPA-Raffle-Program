@@ -40,7 +40,7 @@ public class viewPrizeWindow {
             scene = new Scene(layout, screenWidth/2, screenHeight/2);
             prizeStatement.prefWidthProperty().bind(layout.widthProperty());
             prizeNumber.prefWidthProperty().bind(layout.widthProperty());
-            prizeStatement.setMaxWidth(7*screenWidth/8);
+            prizeStatement.setMaxWidth(3*screenWidth/8);
             prizeNumber.setMaxWidth(screenWidth/8);
             window.setScene(scene);
             window.setResizable(false);

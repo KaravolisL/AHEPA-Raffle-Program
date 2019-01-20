@@ -111,7 +111,7 @@ public class Raffle extends Application {
 			if (answer) restartRaffle();
 		});
 		about.setOnAction(e -> aboutWindow.display());
-		//editTicket.setOnAction(e -> editTicketWindow.display());
+		editTicket.setOnAction(e -> editTicketWindow.display());
 		//editPrize.setOnAction(e -> editPrizeWindow.display());
 		changeBackgroundColor.setOnAction(e -> {
 			backgroundColor = colorPickerWindow.display();
@@ -339,7 +339,7 @@ public class Raffle extends Application {
 			if (p.getNumber() == raffleList.size() + 1) {
 				double screenHeight = scene.getHeight();
 				double screenWidth = scene.getWidth();
-				PrizeAlert alert = new PrizeAlert((String)p.getStatement());
+				PrizeAlert alert = new PrizeAlert(p.getStatement());
 				alert.setSize(screenWidth/1.5, screenHeight/1.5);
 				PauseTransition delay = new PauseTransition(Duration.seconds(WAIT_TIME));
 		            delay.setOnFinished(e -> {
