@@ -67,11 +67,13 @@ public class editTicketWindow {
                   } else {
                         if (input != 0) {
                               Raffle.ticketNames.get(input-1).setName(newName);
+                              Raffle.ticketText[input-1].setText((input) + "\n" + newName);
                         }
                         // Work around to update the currentTicketName
                         Integer tempInput = input;
                         ticketNumberInput.setText("");
                         ticketNumberInput.setText(tempInput.toString());
+                        // Changing the name on the board
                   }
             });
             // Removes failureMessage when new name is typed

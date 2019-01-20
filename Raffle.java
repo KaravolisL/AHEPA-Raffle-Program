@@ -38,6 +38,9 @@ public class Raffle extends Application {
 	public Rectangle ticketsRemainingRect, ticketsDrawnRect, lastTicketDrawnRect;
 	public Rectangle[] tickets = new Rectangle[225];
 	VBox rows;
+	// Initializing arrays of elements
+	public static Text[] ticketText = new Text[225];
+	public HBox[] ticketCols = new HBox[15];
 	public StackPane[] ticketLayout = new StackPane[225];
 	public StackPane mainTableStack = new StackPane();
 	public final int WAIT_TIME = 4; // How long the prize alert stays
@@ -148,9 +151,6 @@ public class Raffle extends Application {
 		ticketsDrawnRect.setStroke(borderColor);
 		lastTicketDrawnRect.setFill(backgroundColor);
 		lastTicketDrawnRect.setStroke(borderColor);
-		// Initializing arrays of elements
-		Text[] ticketText = new Text[225];
-		HBox[] ticketCols = new HBox[15];
 		// Sets up ticketCols array
 		for (int i = 0; i < 15; i++) {
 			ticketCols[i] = new HBox();
@@ -193,7 +193,6 @@ public class Raffle extends Application {
 		// Adding mainTable to mainTableStack so prize alerts can be added
 		mainTableStack.getChildren().add(mainTable);
 		rows.getChildren().add(mainTableStack);
-		rows.setStyle("-fx-border-color: RED;");
 		// Updating table from save file
 		BufferedReader inRaffleList = new BufferedReader(new FileReader("raffleList.txt"));
 		while (inRaffleList.ready()) {
