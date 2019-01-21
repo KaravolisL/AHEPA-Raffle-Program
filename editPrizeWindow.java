@@ -25,6 +25,7 @@ public class editPrizeWindow {
       public static Label newPrizeDescription = new Label("New Description ");
       public static TextField newPrizeDescriptionInput = new TextField();
       public static Button changeButton = new Button("Add/Change");
+      public static Button deleteButton = new Button("Delete");
       public static Label failureMessage = new Label();
       public static Integer input = 0;
 
@@ -32,13 +33,17 @@ public class editPrizeWindow {
             window.setTitle("Edit Prize");
             // Creating layout and elements
             layout = new GridPane();
-            layout.addRow(0, prizeNumber, prizeNumberInput);
-            layout.addRow(1, currentPrizeDescriptionLabel, currentPrizeDescription);
-            layout.addRow(2, newPrizeDescription, newPrizeDescriptionInput);
-            layout.addRow(3, changeButton, failureMessage);
+            layout.addRow(0, prizeNumber);
+            layout.addRow(1, currentPrizeDescriptionLabel);
+            layout.addRow(2, newPrizeDescription);
+            layout.addRow(3, changeButton, deleteButton, failureMessage);
+            layout.add(prizeNumberInput, 1, 0, 2, 1);
+            layout.add(currentPrizeDescription, 1, 1, 2, 1);
+            layout.add(newPrizeDescriptionInput, 1, 2, 2, 1);
             layout.setAlignment(Pos.CENTER);
             layout.setVgap(10);
             currentPrizeDescription.setWrapText(true);
+            GridPane.setMargin(deleteButton, new Insets(0, 10, 0 , 0));
             // Adding Functionality
             // Updates currentPrizeDescription while user inputs a ticket number
             prizeNumberInput.textProperty().addListener(new ChangeListener<String>() {
@@ -70,12 +75,39 @@ public class editPrizeWindow {
                   if (newDescription.isEmpty()) {
                         failureMessage.setText("Invalid prize description");
                   } else {
-                        if (currentPrizeDescription.getText().charAt(0) == "N") {
+                        if (currentPrizeDescription.getText().charAt(0) == 'N') {
                               // Add Functionality
+                              Raffle.prizeInfo.add(new Prize(input, newDescription));
                         } else {
                               // Edit Functionality
+                              for (Prize p : Raffle.prizeInfo) {
+                                    if (p.getNumber() == input) {
+                                          p.setStatement(newDescription);
+                                    }
+                              }
+                        }
+                        // Work around to update the currentPrizeDescription
+                        Integer tempInput = input;
+                        prizeNumberInput.setText("");
+                        prizeNumberInput.setText(tempInput.toString());
+                  }
+                  // Clearing newPrizeDescriptionInput
+                  newPrizeDescriptionInput.clear();
+            });
+            // deleting prize when button is pressed
+            deleteButton.setOnAction(e -> {
+                  for (Prize p : Raffle.prizeInfo) {
+                        if (p.getNumber() == input) {
+                              Raffle.prizeInfo.remove(p);
+                              break;
                         }
                   }
+                  // Work around to update the currentPrizeDescription
+                  Integer tempInput = input;
+                  prizeNumberInput.setText("");
+                  prizeNumberInput.setText(tempInput.toString());
+                  // Clearing newPrizeDescriptionInput
+                  newPrizeDescriptionInput.clear();
             });
             // Removes failureMessage when new description is typed
             newPrizeDescriptionInput.textProperty().addListener(new ChangeListener<String>() {
@@ -95,7 +127,4 @@ public class editPrizeWindow {
             window.getIcons().add(new Image("Icon.jpg"));
             window.show();
       }
-
-
-
 }
