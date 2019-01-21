@@ -28,4 +28,7 @@ public class Ticket {
             this.name = newName;
       }
 
+      public String toString() {
+            return this.getName();
+      }
 }

@@ -27,4 +27,8 @@ public class Prize {
       public String getStatement() {
             return this.statement;
       }
+
+      public String toString() {
+            return this.getNumber() + " " + this.getStatement();
+      }
 }

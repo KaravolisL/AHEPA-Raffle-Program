@@ -12,7 +12,8 @@ import java.util.*;
 
 public class warningWindow {
 
-      static boolean answer;
+      private static boolean answer;
+      public static GridPane layout = new GridPane();
 
       public static boolean display(String text) {
             Stage window = new Stage();
@@ -23,9 +24,9 @@ public class warningWindow {
             Button yesButton = new Button("Yes");
             Button noButton = new Button("No");
 
-            HBox buttons = new HBox(yesButton, noButton);
-
-            VBox layout = new VBox(contents, buttons);
+            layout.add(contents, 0, 0, 2, 1);
+            layout.addRow(1, yesButton, noButton);
+            layout.setAlignment(Pos.CENTER);
 
             yesButton.setOnAction(e -> {
                   answer = true;
@@ -37,11 +38,9 @@ public class warningWindow {
                   window.close();
             });
 
-            Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
-		double screenHeight = bounds.getMaxY();
-		double screenWidth = bounds.getMaxX();
-            Scene scene = new Scene(layout, screenWidth/2, screenHeight/2);
-
+            Scene scene = new Scene(layout, 300, 175);
+            layout.prefWidthProperty().bind(scene.widthProperty());
+            layout.prefHeightProperty().bind(scene.heightProperty());
             window.setScene(scene);
             // Setting the window's icon
             window.getIcons().add(new Image("Icon.jpg"));

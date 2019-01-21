@@ -4,6 +4,7 @@
 // TODO: User input of ticketNames file
 // TODO: User input of prize info
 // TODO: Fix sizing once and for all
+// TODO: Separate colors picker for prize prizeDescription
 
 import javafx.application.Application;
 import javafx.geometry.*;
@@ -280,6 +281,20 @@ public class Raffle extends Application {
 			outRaffleList.println(i-1);
 		}
 		outRaffleList.close();
+
+		// Updating ticket names
+		PrintWriter outTicketNames = new PrintWriter(new File("ticketNames.txt"));
+		for (Ticket t : ticketNames) {
+			outTicketNames.println(t);
+		}
+		outTicketNames.close();
+
+		// Writing prizeInfo to the save file
+		PrintWriter outPrizeInfo = new PrintWriter(new File("prizeInfo.txt"));
+		for (Prize p : prizeInfo) {
+			outPrizeInfo.println(p);
+		}
+		outPrizeInfo.close();
 	}
 
 
