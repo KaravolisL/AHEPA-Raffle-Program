@@ -38,16 +38,44 @@ public class editPrizeWindow {
             layout.addRow(3, changeButton, failureMessage);
             layout.setAlignment(Pos.CENTER);
             layout.setVgap(10);
+            currentPrizeDescription.setWrapText(true);
             // Adding Functionality
             // Updates currentPrizeDescription while user inputs a ticket number
             prizeNumberInput.textProperty().addListener(new ChangeListener<String>() {
                   public void changed(ObservableValue ov, String s, String s1) {
-
+                        try {
+                              input = Integer.parseInt(s1);
+                        } catch (Exception e) {
+                              input = 0; // sentinal value for invalid number
+                        }
+                        if (s1.isEmpty()) {
+                              currentPrizeDescription.setText(" ");
+                              input = 0;
+                        } else if (input > 0 && input < 226) {
+                              currentPrizeDescription.setText("No prize associated with this number");
+                              for (Prize p : Raffle.prizeInfo) {
+                                    if (p.getNumber() == input) {
+                                          currentPrizeDescription.setText(p.getStatement());
+                                    }
+                              }
+                        } else {
+                              currentPrizeDescription.setText("Invalid Prize Number");
+                              input = 0;
+                        }
                   }
             });
             // Changing ticket name when button is pressed
             changeButton.setOnAction(e -> {
                   String newDescription = newPrizeDescriptionInput.getText();
+                  if (newDescription.isEmpty()) {
+                        failureMessage.setText("Invalid prize description");
+                  } else {
+                        if (currentPrizeDescription.getText().charAt(0) == "N") {
+                              // Add Functionality
+                        } else {
+                              // Edit Functionality
+                        }
+                  }
             });
             // Removes failureMessage when new description is typed
             newPrizeDescriptionInput.textProperty().addListener(new ChangeListener<String>() {
@@ -56,12 +84,13 @@ public class editPrizeWindow {
                   }
             });
 
-            scene = new Scene(layout, 325, 175);
+            scene = new Scene(layout, 525, 275);
             layout.prefWidthProperty().bind(scene.widthProperty());
             layout.prefHeightProperty().bind(scene.heightProperty());
             window.setScene(scene);
             window.setMinWidth(300);
             window.setMinHeight(175);
+            currentPrizeDescription.setPrefWidth(200);
             // Setting the window's icon
             window.getIcons().add(new Image("Icon.jpg"));
             window.show();
