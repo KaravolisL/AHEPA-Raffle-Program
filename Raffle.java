@@ -5,6 +5,7 @@
 // TODO: User input of prize info
 // TODO: Fix sizing once and for all
 // TODO: Separate colors picker for prize prizeDescription
+// TODO: Pretty up windows
 
 import javafx.application.Application;
 import javafx.geometry.*;
@@ -29,24 +30,24 @@ import java.lang.*;
 public class Raffle extends Application {
 
 	public Scene scene;
+	public final int WAIT_TIME = 4; // How long the prize alert stays
+	public static final int NUMBER_OF_TICKETS = 225; // Number of tickets
 	public static ArrayList<Integer> raffleList = new ArrayList<Integer>(226);
 	public static ArrayList<Ticket> ticketNames = new ArrayList<Ticket>(226);
 	public static ArrayList<Prize> prizeInfo = new ArrayList<Prize>(30);
-	public Text ticketsRemainingText = new Text("Tickets Remaining: " + (225-raffleList.size()));
+	public Text ticketsRemainingText = new Text("Tickets Remaining: " + (NUMBER_OF_TICKETS-raffleList.size()));
 	public Text ticketsDrawnText = new Text("Tickets Drawn: 0");
 	public Text lastTicketDrawnText = new Text("Last Ticket Drawn:  ");
 	public Paint backgroundColor = Color.WHITE;
 	public Paint borderColor = Color.BLACK;
 	public Rectangle ticketsRemainingRect, ticketsDrawnRect, lastTicketDrawnRect;
-	public Rectangle[] tickets = new Rectangle[225];
+	public Rectangle[] tickets = new Rectangle[NUMBER_OF_TICKETS];
 	VBox rows;
 	// Initializing arrays of elements
-	public static Text[] ticketText = new Text[225];
+	public static Text[] ticketText = new Text[NUMBER_OF_TICKETS];
 	public HBox[] ticketCols = new HBox[15];
-	public StackPane[] ticketLayout = new StackPane[225];
+	public StackPane[] ticketLayout = new StackPane[NUMBER_OF_TICKETS];
 	public StackPane mainTableStack = new StackPane();
-	public final int WAIT_TIME = 4; // How long the prize alert stays
-	public final int NUMBER_OF_TICKETS = 225; // Number of tickets
 
 	// TODO: Comment and organize all the above initializations
 
@@ -104,9 +105,12 @@ public class Raffle extends Application {
 			File importTicketFile = ticketFileChooser.showOpenDialog(new Stage());
 			importTicketNames(importTicketFile);
 		});
-		/*importPrizes.setOnAction(e -> {
-
-		});*/
+		importPrizes.setOnAction(e -> {
+			FileChooser prizeFileChooser = new FileChooser();
+			prizeFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
+			File importPrizeFile = prizeFileChooser.showOpenDialog(new Stage());
+			importPrizeList(importPrizeFile);
+		});
 		restart.setOnAction(e -> {
 			boolean answer = warningWindow.display("Restarting the raffle will cause all progress to be lost. Are you sure?");
 			if (answer) restartRaffle();
@@ -156,7 +160,7 @@ public class Raffle extends Application {
 		}
 		// Creates table of tickets
 		int counter = 0;
-		for (int i = 0; i < 225; i++) {
+		for (int i = 0; i < NUMBER_OF_TICKETS; i++) {
 			// Creating and styling rectangles
 			tickets[i] = new Rectangle();
 			tickets[i].setFill(backgroundColor);
@@ -329,7 +333,7 @@ public class Raffle extends Application {
 	* removed or replaced
 	*/
 	public void refreshHeader() {
-		ticketsRemainingText.setText("Tickets Remaining: " + (225-raffleList.size()));
+		ticketsRemainingText.setText("Tickets Remaining: " + (NUMBER_OF_TICKETS-raffleList.size()));
 		ticketsDrawnText.setText("Tickets Drawn: " + raffleList.size());
 		if (raffleList.size() == 0) {
 			lastTicketDrawnText.setText("Last Ticket Drawn: 0");
@@ -388,7 +392,7 @@ public class Raffle extends Application {
 			ticketsRemainingRect.setHeight(screenHeight/15);
 			ticketsDrawnRect.setHeight(screenHeight/15);
 			lastTicketDrawnRect.setHeight(screenHeight/15);
-			for (int i = 0; i < 225; i++) {
+			for (int i = 0; i < NUMBER_OF_TICKETS; i++) {
 				tickets[i].setWidth(screenWidth/15.2);
 				tickets[i].setHeight(screenHeight/16.4);
 			}
@@ -396,7 +400,7 @@ public class Raffle extends Application {
 			ticketsRemainingRect.setHeight(screenHeight/15);
 			ticketsDrawnRect.setHeight(screenHeight/15);
 			lastTicketDrawnRect.setHeight(screenHeight/15);
-			for (int i = 0; i < 225; i++) {
+			for (int i = 0; i < NUMBER_OF_TICKETS; i++) {
 				tickets[i].setWidth(screenWidth/15.2);
 				tickets[i].setHeight(screenHeight/17);
 			}
@@ -435,7 +439,8 @@ public class Raffle extends Application {
 	}
 
 	/* importTicketNames
-	*
+	* Takes a file and passes it to readTickets(). Updates the mainTable and
+	* restarts the raffle
 	*
 	* @param file file chosen by user from which the ticket names will
 	* be extracted
@@ -456,8 +461,7 @@ public class Raffle extends Application {
 	}
 
 	/* importPrizeList
-	*
-	*
+	* Takes a file and passes it to readPrizes(). Handles possible errors
 	*
 	* @param file file chosen by user from which prizes will be extracted
 	*/
@@ -491,7 +495,7 @@ public class Raffle extends Application {
 	* First, clears the prizeInfo arraylist, then reads in prizes from the given
 	* file, creates respective Prize objects and adds them to the arrayList
 	*
-	* @param fileName file form which to read the prizes
+	* @param fileName file from which to read the prizes
 	*/
 	public void readPrizes(String fileName) throws FileNotFoundException, IOException {
 		prizeInfo.clear();
