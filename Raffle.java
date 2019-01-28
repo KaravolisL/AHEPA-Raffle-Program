@@ -46,32 +46,17 @@ public class Raffle extends Application {
 	public StackPane[] ticketLayout = new StackPane[225];
 	public StackPane mainTableStack = new StackPane();
 	public final int WAIT_TIME = 4; // How long the prize alert stays
+	public final int NUMBER_OF_TICKETS = 225; // Number of tickets
 
 	// TODO: Comment and organize all the above initializations
 
 	@Override
 	public void init() throws Exception {
 		// Bringing in ticket names
-		BufferedReader inTickets = new BufferedReader(new FileReader("ticketNames.txt"));
-		for (int i = 1; inTickets.ready(); i++) {
-			ticketNames.add(new Ticket(inTickets.readLine(), i));
-		}
-		inTickets.close();
-		// TODO: Throw error when name is too long
-		// TODO: Deal with apostrophes
-
+		readTickets("ticketNames.txt");
 		// Bringing in the prize information
-		BufferedReader inPrizes = new BufferedReader(new FileReader("prizeInfo.txt"));
-		while (inPrizes.ready()) {
-			String line = inPrizes.readLine();
-			Integer prizeNumber = Integer.parseInt(line.substring(0, line.indexOf(" ")));
-			String prizeDescription = line.substring(line.indexOf(" "));
-			prizeInfo.add(new Prize(prizeNumber, prizeDescription));
-		}
-		inPrizes.close();
-		// TODO: Throw error when file is incorrect format
+		readPrizes("prizeInfo.txt");
 	}
-
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -113,6 +98,15 @@ public class Raffle extends Application {
 		menuBar.setMaxHeight(25.3333);
 		menuBar.getMenus().addAll(fileMenu, editMenu, viewMenu, helpMenu);
 		// Functionality for menuItems
+		importTickets.setOnAction(e -> {
+			FileChooser ticketFileChooser = new FileChooser();
+			ticketFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
+			File importTicketFile = ticketFileChooser.showOpenDialog(new Stage());
+			importTicketNames(importTicketFile);
+		});
+		/*importPrizes.setOnAction(e -> {
+
+		});*/
 		restart.setOnAction(e -> {
 			boolean answer = warningWindow.display("Restarting the raffle will cause all progress to be lost. Are you sure?");
 			if (answer) restartRaffle();
@@ -438,5 +432,77 @@ public class Raffle extends Application {
 			r.setStroke(borderColor);
 		}
 		PrizeAlert.setColor(backgroundColor);
+	}
+
+	/* importTicketNames
+	*
+	*
+	* @param file file chosen by user from which the ticket names will
+	* be extracted
+	*/
+	public void importTicketNames(File file) {
+		try {
+			// Reading tickets from new file and updating arrayList
+			readTickets(file.toString());
+		} catch (Exception e) {
+			// TODO: show failure window
+		}
+		// Updating ticket names in the mainTable
+		for (int i = 0; i < NUMBER_OF_TICKETS; i++) {
+			ticketText[i] = new Text((i+1) + "\n" + ticketNames.get(i).getName());
+		}
+		// Restarting raffle
+		restartRaffle();
+	}
+
+	/* importPrizeList
+	*
+	*
+	*
+	* @param file file chosen by user from which prizes will be extracted
+	*/
+	public void importPrizeList(File file) {
+		try {
+			// Reading prizes from new file and updating prizeInfo
+			readPrizes(file.toString());
+		} catch (Exception e) {
+			// TODO: show failure window
+		}
+	}
+
+	/* readTickets
+	* First, clears the ticketNames arrayList, then reads in tickets from the given
+	* file, creates respective Ticket objects and adds them to the arrayList
+	*
+	* @param file?Name file from which to read the tickets
+	*/
+	public void readTickets(String fileName) throws FileNotFoundException, IOException {
+		ticketNames.clear();
+		BufferedReader inTickets = new BufferedReader(new FileReader(fileName));
+		for (int i = 1; inTickets.ready(); i++) {
+			ticketNames.add(new Ticket(inTickets.readLine(), i));
+		}
+		inTickets.close();
+		// TODO: Throw error when name is too long
+		// TODO: Deal with apostrophes
+	}
+
+	/* readPrizes
+	* First, clears the prizeInfo arraylist, then reads in prizes from the given
+	* file, creates respective Prize objects and adds them to the arrayList
+	*
+	* @param fileName file form which to read the prizes
+	*/
+	public void readPrizes(String fileName) throws FileNotFoundException, IOException {
+		prizeInfo.clear();
+		BufferedReader inPrizes = new BufferedReader(new FileReader(fileName));
+		while (inPrizes.ready()) {
+			String line = inPrizes.readLine();
+			Integer prizeNumber = Integer.parseInt(line.substring(0, line.indexOf(" ")));
+			String prizeDescription = line.substring(line.indexOf(" ")+1);
+			prizeInfo.add(new Prize(prizeNumber, prizeDescription));
+		}
+		inPrizes.close();
+		// TODO: Throw error when file is incorrect format
 	}
 }
