@@ -1,11 +1,13 @@
 // General to do:
-// TODO: Splash screen
-// TODO: Change to grid pane?
-// TODO: User input of ticketNames file
-// TODO: User input of prize info
-// TODO: Fix sizing once and for all
-// TODO: Separate colors picker for prize prizeDescription
+// TODO: Change title
+// TODO: Exception catching for files
+// TODO: Change WAIT_TIME
+// TODO: Help section
 // TODO: Pretty up windows
+// TODO: Splash screen
+// TODO: Fix sizing once and for all
+// TODO: Eliminate statics
+// TODO: Package up files
 
 import javafx.application.Application;
 import javafx.geometry.*;
@@ -38,11 +40,12 @@ public class Raffle extends Application {
 	public Text ticketsRemainingText = new Text("Tickets Remaining: " + (NUMBER_OF_TICKETS-raffleList.size()));
 	public Text ticketsDrawnText = new Text("Tickets Drawn: 0");
 	public Text lastTicketDrawnText = new Text("Last Ticket Drawn:  ");
-	public Paint backgroundColor = Color.WHITE;
-	public Paint borderColor = Color.BLACK;
-	public Rectangle ticketsRemainingRect, ticketsDrawnRect, lastTicketDrawnRect;
-	public Rectangle[] tickets = new Rectangle[NUMBER_OF_TICKETS];
-	VBox rows;
+	public static Paint tableBackgroundColor = Color.WHITE;
+	public static Paint alertBackgroundColor = Color.WHITE;
+	public static Paint borderColor = Color.BLACK;
+	public static Rectangle ticketsRemainingRect, ticketsDrawnRect, lastTicketDrawnRect;
+	public static Rectangle[] tickets = new Rectangle[NUMBER_OF_TICKETS];
+	public VBox rows;
 	// Initializing arrays of elements
 	public static Text[] ticketText = new Text[NUMBER_OF_TICKETS];
 	public HBox[] ticketCols = new HBox[15];
@@ -61,7 +64,6 @@ public class Raffle extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-
 		// Finding initial screen dimensions
 		Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
 		double screenHeight = bounds.getMaxY();
@@ -119,8 +121,7 @@ public class Raffle extends Application {
 		editTicket.setOnAction(e -> editTicketWindow.display());
 		editPrize.setOnAction(e -> editPrizeWindow.display());
 		changeBackgroundColor.setOnAction(e -> {
-			backgroundColor = colorPickerWindow.display();
-			restyle();
+			colorPickerWindow.display();
 		});
 		viewFullScreen.setOnAction(e -> {
 			primaryStage.setFullScreen(true);
@@ -147,11 +148,11 @@ public class Raffle extends Application {
 		rows = new VBox(menuBar, header);
 		header.prefHeightProperty().bind(rows.heightProperty());
 		// Styling row of headers
-		ticketsRemainingRect.setFill(backgroundColor);
+		ticketsRemainingRect.setFill(tableBackgroundColor);
 		ticketsRemainingRect.setStroke(borderColor);
-		ticketsDrawnRect.setFill(backgroundColor);
+		ticketsDrawnRect.setFill(tableBackgroundColor);
 		ticketsDrawnRect.setStroke(borderColor);
-		lastTicketDrawnRect.setFill(backgroundColor);
+		lastTicketDrawnRect.setFill(tableBackgroundColor);
 		lastTicketDrawnRect.setStroke(borderColor);
 		// Sets up ticketCols array
 		for (int i = 0; i < 15; i++) {
@@ -163,7 +164,7 @@ public class Raffle extends Application {
 		for (int i = 0; i < NUMBER_OF_TICKETS; i++) {
 			// Creating and styling rectangles
 			tickets[i] = new Rectangle();
-			tickets[i].setFill(backgroundColor);
+			tickets[i].setFill(tableBackgroundColor);
 			tickets[i].setStroke(borderColor);
 			// Creating and styling text
 			ticketText[i] = new Text((i+1) + "\n" + ticketNames.get(i).getName());
@@ -347,7 +348,6 @@ public class Raffle extends Application {
 	* The next ticket number is found, a new object will be created which
 	* creates a styled rectangle and text that is displayed on top of
 	* the mainTable. It will disappear after WAIT_TIME or a button is pressed
-	*
 	*/
 	public void prizeCheck() {
 		for (Prize p : Raffle.prizeInfo) {
@@ -424,18 +424,18 @@ public class Raffle extends Application {
 	/* restyle
 	* Updates the background color and border color of all components
 	*/
-	public void restyle() {
-		ticketsRemainingRect.setFill(backgroundColor);
+	public static void restyle() {
+		ticketsRemainingRect.setFill(tableBackgroundColor);
 		ticketsRemainingRect.setStroke(borderColor);
-		ticketsDrawnRect.setFill(backgroundColor);
+		ticketsDrawnRect.setFill(tableBackgroundColor);
 		ticketsDrawnRect.setStroke(borderColor);
-		lastTicketDrawnRect.setFill(backgroundColor);
+		lastTicketDrawnRect.setFill(tableBackgroundColor);
 		lastTicketDrawnRect.setStroke(borderColor);
 		for (Rectangle r : tickets) {
-			r.setFill(backgroundColor);
+			r.setFill(tableBackgroundColor);
 			r.setStroke(borderColor);
 		}
-		PrizeAlert.setColor(backgroundColor);
+		PrizeAlert.setColor(alertBackgroundColor);
 	}
 
 	/* importTicketNames
@@ -449,15 +449,15 @@ public class Raffle extends Application {
 		try {
 			// Reading tickets from new file and updating arrayList
 			readTickets(file.toString());
+			// Updating ticket names in the mainTable
+			for (int i = 0; i < NUMBER_OF_TICKETS; i++) {
+				ticketText[i] = new Text((i+1) + "\n" + ticketNames.get(i).getName());
+			}
+			// Restarting raffle
+			restartRaffle();
 		} catch (Exception e) {
 			// TODO: show failure window
 		}
-		// Updating ticket names in the mainTable
-		for (int i = 0; i < NUMBER_OF_TICKETS; i++) {
-			ticketText[i] = new Text((i+1) + "\n" + ticketNames.get(i).getName());
-		}
-		// Restarting raffle
-		restartRaffle();
 	}
 
 	/* importPrizeList
