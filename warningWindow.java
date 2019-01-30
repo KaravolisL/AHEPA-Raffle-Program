@@ -45,6 +45,7 @@ public class warningWindow {
             window.setScene(scene);
             // Setting the window's icon
             window.getIcons().add(new Image("Icon.jpg"));
+            window.initModality(Modality.APPLICATION_MODAL);
             window.showAndWait();
             return answer;
       }

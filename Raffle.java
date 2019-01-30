@@ -1,6 +1,4 @@
 // General to do:
-// TODO: Exception catching for files
-// TODO: Change WAIT_TIME
 // TODO: Help section
 // TODO: Pretty up windows
 // TODO: Splash screen
@@ -32,7 +30,7 @@ import java.lang.*;
 public class Raffle extends Application {
 
 	public Scene scene;
-	public final int WAIT_TIME = 4; // How long the prize alert stays
+	public static int waitTime = 4; // How long the prize alert stays
 	public static final int NUMBER_OF_TICKETS = 225; // Number of tickets
 	public static ArrayList<Integer> raffleList = new ArrayList<Integer>(226);
 	public static ArrayList<Ticket> ticketNames = new ArrayList<Ticket>(226);
@@ -85,6 +83,7 @@ public class Raffle extends Application {
 		MenuItem editTicket = new MenuItem("Edit Ticket");
 		MenuItem editPrize = new MenuItem("Edit Prize");
 		MenuItem changeBackgroundColor = new MenuItem("Change Background Color");
+		MenuItem editPrizeAlert = new MenuItem("Edit Prize Alert");
 		// Creating viewMenu items
 		MenuItem viewFullScreen = new MenuItem("Full Screen");
 		MenuItem viewMaximized = new MenuItem("Maximize");
@@ -95,7 +94,7 @@ public class Raffle extends Application {
 		// Adding fileMenu items
 		fileMenu.getItems().addAll(importTickets, importPrizes, restart);
 		// Adding editMenu items
-		editMenu.getItems().addAll(editTicket, editPrize, changeBackgroundColor);
+		editMenu.getItems().addAll(editTicket, editPrize, changeBackgroundColor, editPrizeAlert);
 		// Adding viewMenu items
 		viewMenu.getItems().addAll(viewFullScreen, viewMaximized, new SeparatorMenuItem(), viewTicketNames, viewPrizes);
 		// Adding helpMenu items
@@ -124,9 +123,8 @@ public class Raffle extends Application {
 		about.setOnAction(e -> aboutWindow.display());
 		editTicket.setOnAction(e -> editTicketWindow.display());
 		editPrize.setOnAction(e -> editPrizeWindow.display());
-		changeBackgroundColor.setOnAction(e -> {
-			colorPickerWindow.display();
-		});
+		changeBackgroundColor.setOnAction(e -> colorPickerWindow.display());
+		editPrizeAlert.setOnAction(e -> editPrizeAlertWindow.display());
 		viewFullScreen.setOnAction(e -> {
 			primaryStage.setFullScreen(true);
 			rows.getChildren().remove(menuBar);
@@ -354,7 +352,7 @@ public class Raffle extends Application {
 	* This method will search prizeInfo for the next ticket number. If
 	* The next ticket number is found, a new object will be created which
 	* creates a styled rectangle and text that is displayed on top of
-	* the mainTable. It will disappear after WAIT_TIME or a button is pressed
+	* the mainTable. It will disappear after waitTime or a button is pressed
 	*/
 	public void prizeCheck() {
 		for (Prize p : Raffle.prizeInfo) {
@@ -363,7 +361,7 @@ public class Raffle extends Application {
 				double screenWidth = scene.getWidth();
 				PrizeAlert alert = new PrizeAlert(p.getStatement());
 				alert.setSize(screenWidth/1.5, screenHeight/1.5);
-				PauseTransition delay = new PauseTransition(Duration.seconds(WAIT_TIME));
+				PauseTransition delay = new PauseTransition(Duration.seconds(waitTime));
 		            delay.setOnFinished(e -> {
 					if (alert.visible) {
 						mainTableStack.getChildren().remove(mainTableStack.getChildren().size()-1);
@@ -514,6 +512,5 @@ public class Raffle extends Application {
 			prizeInfo.add(new Prize(prizeNumber, prizeDescription));
 		}
 		inPrizes.close();
-		// TODO: Throw error when file is incorrect format
 	}
 }
