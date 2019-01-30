@@ -1,5 +1,4 @@
 // General to do:
-// TODO: Change title
 // TODO: Exception catching for files
 // TODO: Change WAIT_TIME
 // TODO: Help section
@@ -8,6 +7,7 @@
 // TODO: Fix sizing once and for all
 // TODO: Eliminate statics
 // TODO: Package up files
+// TODO: Replace refreshHeader with listener
 
 import javafx.application.Application;
 import javafx.geometry.*;
@@ -56,10 +56,14 @@ public class Raffle extends Application {
 
 	@Override
 	public void init() throws Exception {
-		// Bringing in ticket names
-		readTickets("ticketNames.txt");
-		// Bringing in the prize information
-		readPrizes("prizeInfo.txt");
+		try {
+			// Bringing in ticket names
+			readTickets("ticketNames.txt");
+			// Bringing in the prize information
+			readPrizes("prizeInfo.txt");
+		} catch (Exception e) {
+			failureWindow.display("Save file was corrupted.\nPlease check ticket names and prize information.");
+		}
 	}
 
 	@Override
@@ -197,13 +201,16 @@ public class Raffle extends Application {
 		mainTableStack.getChildren().add(mainTable);
 		rows.getChildren().add(mainTableStack);
 		// Updating table from save file
-		BufferedReader inRaffleList = new BufferedReader(new FileReader("raffleList.txt"));
-		while (inRaffleList.ready()) {
-			removeTicket(ticketLayout[Integer.parseInt(inRaffleList.readLine())]);
+		try {
+			BufferedReader inRaffleList = new BufferedReader(new FileReader("raffleList.txt"));
+			while (inRaffleList.ready()) {
+				removeTicket(ticketLayout[Integer.parseInt(inRaffleList.readLine())]);
+			}
+			refreshHeader();
+			inRaffleList.close();
+		} catch (Exception e) {
+			failureWindow.display("Save file was corrupted.\nRaffle was restarted");
 		}
-		refreshHeader();
-		inRaffleList.close();
-
 		// Implementing textField onKeyPressed
 		textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent ke) {
@@ -264,7 +271,7 @@ public class Raffle extends Application {
 		primaryStage.resizableProperty().setValue(Boolean.FALSE);
 		scene = new Scene(rows);
 		primaryStage.setScene(scene);
-		primaryStage.setTitle("Test");
+		primaryStage.setTitle("AHEPA Raffle 2019");
 		// Setting application icon
 		primaryStage.getIcons().add(new Image("Icon.jpg"));
 		primaryStage.show();
@@ -456,7 +463,7 @@ public class Raffle extends Application {
 			// Restarting raffle
 			restartRaffle();
 		} catch (Exception e) {
-			// TODO: show failure window
+			failureWindow.display("Failed to import ticket names.");
 		}
 	}
 
@@ -470,7 +477,7 @@ public class Raffle extends Application {
 			// Reading prizes from new file and updating prizeInfo
 			readPrizes(file.toString());
 		} catch (Exception e) {
-			// TODO: show failure window
+			failureWindow.display("Failed to import prize list");
 		}
 	}
 

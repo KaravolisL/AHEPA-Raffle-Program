@@ -41,6 +41,7 @@ public class warningWindow {
             Scene scene = new Scene(layout, 300, 175);
             layout.prefWidthProperty().bind(scene.widthProperty());
             layout.prefHeightProperty().bind(scene.heightProperty());
+            contents.setWrappingWidth(scene.getWidth());
             window.setScene(scene);
             // Setting the window's icon
             window.getIcons().add(new Image("Icon.jpg"));
