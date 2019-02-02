@@ -29,6 +29,7 @@ public class PrizeAlert {
       public void setSize(double width, double height) {
             window.setWidth(width);
             window.setHeight(height);
+            text.setWrappingWidth(width*0.8);
       }
 
       public StackPane getPane() {

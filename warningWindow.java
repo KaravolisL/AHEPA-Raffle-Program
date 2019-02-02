@@ -27,6 +27,8 @@ public class warningWindow {
             layout.add(contents, 0, 0, 2, 1);
             layout.addRow(1, yesButton, noButton);
             layout.setAlignment(Pos.CENTER);
+            GridPane.setHalignment(noButton, HPos.CENTER);
+            GridPane.setHalignment(yesButton, HPos.CENTER);
 
             yesButton.setOnAction(e -> {
                   answer = true;

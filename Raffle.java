@@ -1,5 +1,6 @@
 // General to do:
 // TODO: Help section
+// TODO: Raffle "progress" when ticketDrawn is pressed
 // TODO: Pretty up windows
 // TODO: Splash screen
 // TODO: Fix sizing once and for all
@@ -120,7 +121,7 @@ public class Raffle extends Application {
 			boolean answer = warningWindow.display("Restarting the raffle will cause all progress to be lost. Are you sure?");
 			if (answer) restartRaffle();
 		});
-		about.setOnAction(e -> aboutWindow.display());
+		about.setOnAction(e -> new aboutWindow().display());
 		editTicket.setOnAction(e -> editTicketWindow.display());
 		editPrize.setOnAction(e -> editPrizeWindow.display());
 		changeBackgroundColor.setOnAction(e -> colorPickerWindow.display());
@@ -456,7 +457,7 @@ public class Raffle extends Application {
 			readTickets(file.toString());
 			// Updating ticket names in the mainTable
 			for (int i = 0; i < NUMBER_OF_TICKETS; i++) {
-				ticketText[i] = new Text((i+1) + "\n" + ticketNames.get(i).getName());
+				ticketText[i].setText((i+1) + "\n" + ticketNames.get(i).getName());
 			}
 			// Restarting raffle
 			restartRaffle();
