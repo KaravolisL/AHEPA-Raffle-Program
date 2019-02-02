@@ -125,7 +125,6 @@ public class editPrizeWindow {
             currentPrizeDescription.setPrefWidth(200);
             // Setting the window's icon
             window.getIcons().add(new Image("Icon.jpg"));
-            window.initModality(Modality.APPLICATION_MODAL);
             window.show();
       }
 }

@@ -1,6 +1,5 @@
 // General to do:
-// TODO: Change header font
-// TODO: Windows only open once?
+// TODO: Add confirm/cancel to editPrizeAlertWindow
 // TODO: Help section
 // TODO: Raffle "progress" when ticketDrawn is pressed
 // TODO: Pretty up windows
@@ -41,6 +40,7 @@ public class Raffle extends Application {
 	public Text ticketsRemainingText = new Text("Tickets Remaining: " + (NUMBER_OF_TICKETS-raffleList.size()));
 	public Text ticketsDrawnText = new Text("Tickets Drawn: 0");
 	public Text lastTicketDrawnText = new Text("Last Ticket Drawn:  ");
+	public static final Font headerFont = new Font(18);
 	public static Paint tableBackgroundColor = Color.WHITE;
 	public static Paint alertBackgroundColor = Color.WHITE;
 	public static Paint borderColor = Color.BLACK;
@@ -127,7 +127,7 @@ public class Raffle extends Application {
 		editTicket.setOnAction(e -> editTicketWindow.display());
 		editPrize.setOnAction(e -> editPrizeWindow.display());
 		changeBackgroundColor.setOnAction(e -> colorPickerWindow.display());
-		editPrizeAlert.setOnAction(e -> editPrizeAlertWindow.display());
+		editPrizeAlert.setOnAction(e -> new editPrizeAlertWindow().display());
 		viewFullScreen.setOnAction(e -> {
 			primaryStage.setFullScreen(true);
 			rows.getChildren().remove(menuBar);
@@ -149,6 +149,9 @@ public class Raffle extends Application {
 		StackPane ticketsDrawnPane = new StackPane(ticketsDrawnRect, ticketsDrawnText);
 		lastTicketDrawnRect = new Rectangle(screenWidth/3, screenHeight/18);
 		StackPane lastTicketDrawnPane = new StackPane(lastTicketDrawnRect, lastTicketDrawnText);
+		ticketsRemainingText.setFont(headerFont);
+		ticketsDrawnText.setFont(headerFont);
+		lastTicketDrawnText.setFont(headerFont);
 		HBox header = new HBox(ticketsRemainingPane, ticketsDrawnPane, lastTicketDrawnPane);
 		rows = new VBox(menuBar, header);
 		header.prefHeightProperty().bind(rows.heightProperty());
@@ -486,7 +489,7 @@ public class Raffle extends Application {
 	* First, clears the ticketNames arrayList, then reads in tickets from the given
 	* file, creates respective Ticket objects and adds them to the arrayList
 	*
-	* @param file?Name file from which to read the tickets
+	* @param fileName file from which to read the tickets
 	*/
 	public void readTickets(String fileName) throws FileNotFoundException, IOException {
 		ticketNames.clear();

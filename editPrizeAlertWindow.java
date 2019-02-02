@@ -1,3 +1,5 @@
+// TODO: Add constructor, modality and fix display method
+
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.text.*;
@@ -13,14 +15,14 @@ import java.util.*;
 
 public class editPrizeAlertWindow {
 
-      private static Stage window = new Stage();
-      private static Scene scene;
-      private static GridPane layout = new GridPane();
-      private static Label displayDuration = new Label("Display Duration (in seconds): ");
-      private static TextField durationInput = new TextField("" + Raffle.waitTime);
-      private static Text warning = new Text();
+      private Stage window = new Stage();
+      private Scene scene;
+      private GridPane layout = new GridPane();
+      private Label displayDuration = new Label("Display Duration (in seconds): ");
+      private TextField durationInput = new TextField("" + Raffle.waitTime);
+      private Text warning = new Text();
 
-      public static void display() {
+      public void display() {
             window.setTitle("Edit Prize Alerts");
 
             layout.addRow(0, displayDuration, durationInput);
@@ -44,7 +46,6 @@ public class editPrizeAlertWindow {
             window.setScene(scene);
             // Setting the window's icon
             window.getIcons().add(new Image("Icon.jpg"));
-            window.initModality(Modality.APPLICATION_MODAL);
             window.showAndWait();
       }
 
