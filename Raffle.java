@@ -1,4 +1,6 @@
 // General to do:
+// TODO: Change header font
+// TODO: Windows only open once?
 // TODO: Help section
 // TODO: Raffle "progress" when ticketDrawn is pressed
 // TODO: Pretty up windows
@@ -489,8 +491,12 @@ public class Raffle extends Application {
 	public void readTickets(String fileName) throws FileNotFoundException, IOException {
 		ticketNames.clear();
 		BufferedReader inTickets = new BufferedReader(new FileReader(fileName));
-		for (int i = 1; inTickets.ready(); i++) {
-			ticketNames.add(new Ticket(inTickets.readLine(), i));
+		for (int i = 1; i <= NUMBER_OF_TICKETS; i++) {
+			if (inTickets.ready()) {
+				ticketNames.add(new Ticket(inTickets.readLine(), i));
+			} else {
+				ticketNames.add(new Ticket("", i));
+			}
 		}
 		inTickets.close();
 		// TODO: Throw error when name is too long
