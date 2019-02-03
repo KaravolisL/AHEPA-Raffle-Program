@@ -1,3 +1,5 @@
+// TODO: Redo bindings using .divide()
+
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.text.*;

@@ -1,5 +1,3 @@
-// TODO: Add constructor, modality and fix display method
-
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.text.*;

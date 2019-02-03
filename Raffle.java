@@ -1,7 +1,6 @@
 // General to do:
-// TODO: Add confirm/cancel to editPrizeAlertWindow
 // TODO: Help section
-// TODO: Raffle "progress" when ticketDrawn is pressed
+// TODO: Add ability to change font size for prize alerts
 // TODO: Pretty up windows
 // TODO: Splash screen
 // TODO: Fix sizing once and for all
@@ -257,6 +256,8 @@ public class Raffle extends Application {
 				prizeCheck();
 			}
 		});
+		// Implementing raffle record view on ticketsDrawnPane
+		ticketsDrawnPane.setOnMouseClicked(e -> new raffleRecordWindow().display());
 
 		// Undoes changes made when going into full screen
 		rows.setOnKeyPressed(new EventHandler<KeyEvent>() {

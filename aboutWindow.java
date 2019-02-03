@@ -138,11 +138,42 @@ public class aboutWindow {
 
       private class RunningPane {
             private GridPane runningLayout = new GridPane();
-
-            // TODO: Add tips for user
-
+            private Text sectionTitle1 = new Text("Removing a Ticket");
+            private Text removingTicket = new Text("A ticket can be removed from the table simply by clicking on it. A text field is also hidden to the left " +
+            "of where the number of tickets remaining is displayed. The ticket number can be entered here and pressing enter will remove the corresponding ticket. " +
+            "If an invalid number is entered, the field will be cleared and nothing will happen. In the case that all tickets must be removed at once, 800 can be " +
+            "entered.");
+            private Text sectionTitle2 = new Text("Replacing a Ticket");
+            private Text replacingTicket = new Text("In the case that a ticket is removed mistakenly, the user can click the box in which the last ticket drawn is " +
+            "displayed. This will replace the last ticket that was removed.");
+            private Text sectionTitle3 = new Text("Viewing Raffle Record");
+            private Text viewingRaffleRecord = new Text("A record of the raffle can be seen by clicking the box where the number of tickets drawn is displayed.");
+            private Text sectionTitle4 = new Text("Prize Alert");
+            private Text prizeAlerts = new Text("A prize alert will appear one ticket before its corresponding ticket is drawn. For instance, if a prize is registered " +
+            "for the 25th ticket, the alert will appear after the 24th ticket is drawn. The alert will remain for 4 seconds by default. This time can be changed in the " +
+            "edit menu. Alternatively, the enter key can be pressed to remove it prematurely.");
+            private Text[] texts = {sectionTitle1, removingTicket,
+                                    sectionTitle2, replacingTicket,
+                                    sectionTitle3, viewingRaffleRecord,
+                                    sectionTitle4, prizeAlerts};
 
             public RunningPane() {
+                  // Setting up pane
+                  for (int i = 0; i < texts.length; i++) {
+                        texts[i].setTextAlignment(TextAlignment.CENTER);
+                        texts[i].setWrappingWidth(375);
+                        if (i % 2 == 0) {
+                              runningLayout.add(texts[i], 0, i);
+                        } else {
+                              runningLayout.add(texts[i], 1, i-1);
+                        }
+                  }
+                  ColumnConstraints titleColumn = new ColumnConstraints();
+                  ColumnConstraints textColumn = new ColumnConstraints();
+                  titleColumn.setPercentWidth(10);
+                  textColumn.setPercentWidth(90);
+                  runningLayout.getColumnConstraints().addAll(titleColumn, textColumn);
+                  runningLayout.setVgap(20);
                   runningLayout.setAlignment(Pos.CENTER);
                   // Displaying pane to main window
                   runningLayout.prefWidthProperty().bind(pageLayout.widthProperty());
