@@ -1,5 +1,4 @@
 // General to do:
-// TODO: Help section
 // TODO: Add ability to change font size for prize alerts
 // TODO: Pretty up windows
 // TODO: Splash screen
@@ -276,7 +275,7 @@ public class Raffle extends Application {
 		primaryStage.resizableProperty().setValue(Boolean.FALSE);
 		scene = new Scene(rows);
 		primaryStage.setScene(scene);
-		primaryStage.setTitle("AHEPA Raffle 2019");
+		primaryStage.setTitle("AHEPA Raffle " + Calendar.getInstance().get(Calendar.YEAR));
 		// Setting application icon
 		primaryStage.getIcons().add(new Image("Icon.jpg"));
 		primaryStage.show();

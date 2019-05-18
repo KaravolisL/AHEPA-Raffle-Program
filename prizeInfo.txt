@@ -1,4 +1,3 @@
-25 they will die
 75 The next ticket drawn will win $100 cash.
 125 The next ticket drawn will win $100 cash.
 175 The next ticket drawn will win $100 cash.
@@ -17,4 +16,3 @@
 223 The next ticket drawn will win $250 cash and a golf foursome.Compliments of Washington Country Club.
 224 The next ticket drawn will win $500 cash and a golf foursome.Compliments of Southpointe Golf Club.
 225 The next ticket drawn will win $5000 cash and a centerpiece.Compliments of Malones Flower Shop.
-26 they will alos dies
