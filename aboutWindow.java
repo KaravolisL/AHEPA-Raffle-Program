@@ -22,7 +22,7 @@ public class aboutWindow {
       private ToggleButton importingButton = new ToggleButton("Importing");
       private ToggleButton runningButton = new ToggleButton("Running the Raffle");
 
-      public void display() {
+      public aboutWindow() {
             window.setTitle("About");
             // Setting up initial window contents
             toolBar.getItems().addAll(aboutButton, importingButton, runningButton);
@@ -67,6 +67,9 @@ public class aboutWindow {
             window.setMinHeight(175);
             // Setting the window's icon
             window.getIcons().add(new Image("Icon.jpg"));
+      }
+
+      public void display() {
             window.show();
       }
 

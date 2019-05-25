@@ -17,11 +17,11 @@ import java.util.*;
 
 public class viewTicketNamesWindow {
 
-      public static Stage window = new Stage();
-      public static Scene scene;
-      public static TableView table = new TableView();
+      private Stage window = new Stage();
+      private Scene scene;
+      private TableView table = new TableView();
 
-      public static void display() {
+      public viewTicketNamesWindow() {
             window.setTitle("View Ticket Names");
 
             ObservableList<Ticket> data = FXCollections.observableArrayList(Raffle.ticketNames);
@@ -49,6 +49,9 @@ public class viewTicketNamesWindow {
             window.setResizable(false);
             // Setting the window's icon
             window.getIcons().add(new Image("Icon.jpg"));
+      }
+
+      public void display() {
             window.showAndWait();
       }
 }

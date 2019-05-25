@@ -16,11 +16,11 @@ import java.util.*;
 
 public class viewPrizeWindow {
 
-      public static Stage window = new Stage();
-      public static Scene scene;
-      public static TableView table = new TableView();
+      private Stage window = new Stage();
+      private Scene scene;
+      private TableView table = new TableView();
 
-      public static void display() {
+      public viewPrizeWindow() {
             window.setTitle("Prizes");
 
             ObservableList<Prize> data = FXCollections.observableArrayList(Raffle.prizeInfo);
@@ -48,6 +48,9 @@ public class viewPrizeWindow {
             window.setResizable(false);
             // Setting the window's icon
             window.getIcons().add(new Image("Icon.jpg"));
+      }
+
+      public void display() {
             window.showAndWait();
       }
 }

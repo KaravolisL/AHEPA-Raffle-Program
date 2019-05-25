@@ -12,11 +12,11 @@ import java.util.*;
 
 public class failureWindow {
 
-      private static Stage window = new Stage();
-      private static Scene scene;
-      private static GridPane layout = new GridPane();
+      private Stage window = new Stage();
+      private Scene scene;
+      private GridPane layout = new GridPane();
 
-      public static void display(String text) {
+      public failureWindow(String text) {
             window.setTitle("Import Failed");
             Text contents = new Text(text);
             contents.setTextAlignment(TextAlignment.CENTER);
@@ -31,6 +31,9 @@ public class failureWindow {
             // Setting the window's icon
             window.getIcons().add(new Image("Icon.jpg"));
             window.initModality(Modality.APPLICATION_MODAL);
+      }
+
+      public void display() {
             window.showAndWait();
       }
 }

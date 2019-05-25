@@ -12,18 +12,18 @@ import java.util.*;
 
 public class colorPickerWindow {
 
-      public static Stage window = new Stage();
-      private static Scene scene;
-      public static Paint color;
-      public static Label tableColor = new Label("Table Color: ");
-      public static Label alertColor = new Label("Prize Alert Color: ");
-      public static ColorPicker tableColorPicker = new ColorPicker();
-      public static ColorPicker alertColorPicker = new ColorPicker();
-      public static Button tableColorChange = new Button("Change");
-      public static Button alertColorChange = new Button("Change");
-      public static GridPane layout;
+      private Stage window = new Stage();
+      private Scene scene;
+      private Paint color;
+      private Label tableColor = new Label("Table Color: ");
+      private Label alertColor = new Label("Prize Alert Color: ");
+      private ColorPicker tableColorPicker = new ColorPicker();
+      private ColorPicker alertColorPicker = new ColorPicker();
+      private Button tableColorChange = new Button("Change");
+      private Button alertColorChange = new Button("Change");
+      private GridPane layout;
 
-      public static void display() {
+      public colorPickerWindow() {
             window.setTitle("Background Color");
             // Creating and styling layout and elements
             layout = new GridPane();
@@ -51,6 +51,9 @@ public class colorPickerWindow {
             window.setMinHeight(175);
             // Setting the window's icon
             window.getIcons().add(new Image("Icon.jpg"));
+      }
+
+      public void display() {
             window.showAndWait();
       }
 }

@@ -58,8 +58,6 @@ public class raffleRecordWindow {
             window.initModality(Modality.APPLICATION_MODAL);;
       }
 
-
-
       public void display() {
             window.showAndWait();
       }

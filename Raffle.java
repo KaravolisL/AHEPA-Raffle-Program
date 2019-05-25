@@ -61,7 +61,7 @@ public class Raffle extends Application {
 			// Bringing in the prize information
 			readPrizes("prizeInfo.txt");
 		} catch (Exception e) {
-			failureWindow.display("Save file was corrupted.\nPlease check ticket names and prize information.");
+			new failureWindow("Save file was corrupted.\nPlease check ticket names and prize information.").display();
 		}
 	}
 
@@ -118,13 +118,13 @@ public class Raffle extends Application {
 			importPrizeList(importPrizeFile);
 		});
 		restart.setOnAction(e -> {
-			boolean answer = warningWindow.display("Restarting the raffle will cause all progress to be lost. Are you sure?");
+			boolean answer = new warningWindow("Restarting the raffle will cause all progress to be lost. Are you sure?").display();
 			if (answer) restartRaffle();
 		});
 		about.setOnAction(e -> new aboutWindow().display());
-		editTicket.setOnAction(e -> editTicketWindow.display());
-		editPrize.setOnAction(e -> editPrizeWindow.display());
-		changeBackgroundColor.setOnAction(e -> colorPickerWindow.display());
+		editTicket.setOnAction(e -> new editTicketWindow().display());
+		editPrize.setOnAction(e -> new editPrizeWindow().display());
+		changeBackgroundColor.setOnAction(e -> new colorPickerWindow().display());
 		editPrizeAlert.setOnAction(e -> new editPrizeAlertWindow().display());
 		viewFullScreen.setOnAction(e -> {
 			primaryStage.setFullScreen(true);
@@ -135,8 +135,8 @@ public class Raffle extends Application {
 			primaryStage.setMaximized(true);
 			resize(false);
 		});
-		viewTicketNames.setOnAction(e -> viewTicketNamesWindow.display());
-		viewPrizes.setOnAction(e -> viewPrizeWindow.display());
+		viewTicketNames.setOnAction(e -> new viewTicketNamesWindow().display());
+		viewPrizes.setOnAction(e -> new viewPrizeWindow().display());
 		// Creating row of headers
 		ticketsRemainingRect = new Rectangle(screenWidth/3, screenHeight/18);
 		// TextField for typing removal placed in the center of ticketRemainingPane
@@ -211,7 +211,7 @@ public class Raffle extends Application {
 			refreshHeader();
 			inRaffleList.close();
 		} catch (Exception e) {
-			failureWindow.display("Save file was corrupted.\nRaffle was restarted");
+			new failureWindow("Save file was corrupted.\nRaffle was restarted").display();
 		}
 		// Implementing textField onKeyPressed
 		textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -467,7 +467,7 @@ public class Raffle extends Application {
 			// Restarting raffle
 			restartRaffle();
 		} catch (Exception e) {
-			failureWindow.display("Failed to import ticket names.");
+			new failureWindow("Failed to import ticket names.").display();
 		}
 	}
 
@@ -481,7 +481,7 @@ public class Raffle extends Application {
 			// Reading prizes from new file and updating prizeInfo
 			readPrizes(file.toString());
 		} catch (Exception e) {
-			failureWindow.display("Failed to import prize list");
+			new failureWindow("Failed to import prize list").display();
 		}
 	}
 
