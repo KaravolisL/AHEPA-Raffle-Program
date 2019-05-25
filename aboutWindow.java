@@ -22,7 +22,7 @@ public class aboutWindow {
       private ToggleButton importingButton = new ToggleButton("Importing");
       private ToggleButton runningButton = new ToggleButton("Running the Raffle");
 
-      public void display() {
+      public aboutWindow() {
             window.setTitle("About");
             // Setting up initial window contents
             toolBar.getItems().addAll(aboutButton, importingButton, runningButton);
@@ -67,6 +67,9 @@ public class aboutWindow {
             window.setMinHeight(175);
             // Setting the window's icon
             window.getIcons().add(new Image("Icon.jpg"));
+      }
+
+      public void display() {
             window.show();
       }
 
@@ -84,7 +87,7 @@ public class aboutWindow {
       private class AboutPane {
             private GridPane aboutLayout = new GridPane();
             private Text contents = new Text("This program was made by Luke Karavolis\n"
-            + "For more information, visit https://github.com/KaravolisL/AHEPA-Raffle-Program or email karavolisl@gmail.com\n");
+            + "For more information and to report any bugs, visit https://github.com/KaravolisL/AHEPA-Raffle-Program \nor email karavolisl@gmail.com\n");
             private ImageView logo = new ImageView(new Image("Logo.jpg"));
 
             public AboutPane() {

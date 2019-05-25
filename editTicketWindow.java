@@ -16,20 +16,20 @@ import java.util.*;
 
 public class editTicketWindow {
 
-      public static Stage window = new Stage();
-      public static Scene scene;
-      public static GridPane layout;
-      public static Label ticketNumber = new Label("Ticket Number");
-      public static TextField ticketNumberInput = new TextField();
-      public static Label currentTicketNameLabel = new Label("Current Name: ");
-      public static Label currentTicketName = new Label();
-      public static Label newTicketName = new Label("New Name");
-      public static TextField newTicketNameInput = new TextField();
-      public static Button changeButton = new Button("Change");
-      public static Label failureMessage = new Label();
-      public static Integer input = 0;
+      private Stage window = new Stage();
+      private Scene scene;
+      private GridPane layout;
+      private Label ticketNumber = new Label("Ticket Number");
+      private TextField ticketNumberInput = new TextField();
+      private Label currentTicketNameLabel = new Label("Current Name: ");
+      private Label currentTicketName = new Label();
+      private Label newTicketName = new Label("New Name");
+      private TextField newTicketNameInput = new TextField();
+      private Button changeButton = new Button("Change");
+      private Label failureMessage = new Label();
+      private Integer input = 0;
 
-      public static void display() {
+      public editTicketWindow() {
             window.setTitle("Edit Ticket");
             // Creating layout and elements
             layout = new GridPane();
@@ -90,6 +90,9 @@ public class editTicketWindow {
             window.setMinHeight(175);
             // Setting the window's icon
             window.getIcons().add(new Image("Icon.jpg"));
+      }
+
+      public void display() {
             window.show();
       }
 }

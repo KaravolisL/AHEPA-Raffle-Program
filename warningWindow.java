@@ -12,11 +12,11 @@ import java.util.*;
 
 public class warningWindow {
 
-      private static boolean answer;
-      public static GridPane layout = new GridPane();
+      private boolean answer;
+      private Stage window = new Stage();
+      private GridPane layout = new GridPane();
 
-      public static boolean display(String text) {
-            Stage window = new Stage();
+      public warningWindow(String text) {
             window.setTitle("Warning");
             Text contents = new Text(text);
             contents.setTextAlignment(TextAlignment.CENTER);
@@ -48,6 +48,9 @@ public class warningWindow {
             // Setting the window's icon
             window.getIcons().add(new Image("Icon.jpg"));
             window.initModality(Modality.APPLICATION_MODAL);
+      }
+
+      public boolean display() {
             window.showAndWait();
             return answer;
       }

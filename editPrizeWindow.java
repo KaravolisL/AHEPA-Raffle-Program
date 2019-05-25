@@ -15,21 +15,21 @@ import java.util.*;
 
 public class editPrizeWindow {
 
-      public static Stage window = new Stage();
-      public static Scene scene;
-      public static GridPane layout;
-      public static Label prizeNumber = new Label("Prize Number ");
-      public static TextField prizeNumberInput = new TextField();
-      public static Label currentPrizeDescriptionLabel = new Label("Current Description: ");
-      public static Label currentPrizeDescription = new Label();
-      public static Label newPrizeDescription = new Label("New Description ");
-      public static TextField newPrizeDescriptionInput = new TextField();
-      public static Button changeButton = new Button("Add/Change");
-      public static Button deleteButton = new Button("Delete");
-      public static Label failureMessage = new Label();
-      public static Integer input = 0;
+      private Stage window = new Stage();
+      private Scene scene;
+      private GridPane layout;
+      private Label prizeNumber = new Label("Prize Number ");
+      private TextField prizeNumberInput = new TextField();
+      private Label currentPrizeDescriptionLabel = new Label("Current Description: ");
+      private Label currentPrizeDescription = new Label();
+      private Label newPrizeDescription = new Label("New Description ");
+      private TextField newPrizeDescriptionInput = new TextField();
+      private Button changeButton = new Button("Add/Change");
+      private Button deleteButton = new Button("Delete");
+      private Label failureMessage = new Label();
+      private Integer input = 0;
 
-      public static void display() {
+      public editPrizeWindow() {
             window.setTitle("Edit Prize");
             // Creating layout and elements
             layout = new GridPane();
@@ -125,6 +125,9 @@ public class editPrizeWindow {
             currentPrizeDescription.setPrefWidth(200);
             // Setting the window's icon
             window.getIcons().add(new Image("Icon.jpg"));
+      }
+
+      public void display() {
             window.show();
       }
 }
