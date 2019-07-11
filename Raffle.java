@@ -35,15 +35,11 @@ public class Raffle extends Application {
 	public static ArrayList<Integer> raffleList = new ArrayList<Integer>(226);
 	public static ArrayList<Ticket> ticketNames = new ArrayList<Ticket>(226);
 	public static ArrayList<Prize> prizeInfo = new ArrayList<Prize>(30);
-	public Text ticketsRemainingText = new Text("Tickets Remaining: " + (NUMBER_OF_TICKETS-raffleList.size()));
-	public Text ticketsDrawnText = new Text("Tickets Drawn: 0");
-	public Text lastTicketDrawnText = new Text("Last Ticket Drawn:  ");
-	public static final Font headerFont = new Font(18);
 	public static Paint tableBackgroundColor = Color.WHITE;
 	public static Paint alertBackgroundColor = Color.WHITE;
 	public static Paint borderColor = Color.BLACK;
-	public static Rectangle ticketsRemainingRect, ticketsDrawnRect, lastTicketDrawnRect;
 	public static Rectangle[] tickets = new Rectangle[NUMBER_OF_TICKETS];
+	public Header header = new Header();
 	public VBox rows;
 	// Initializing arrays of elements
 	public static Text[] ticketText = new Text[NUMBER_OF_TICKETS];
@@ -138,28 +134,7 @@ public class Raffle extends Application {
 		viewTicketNames.setOnAction(e -> new viewTicketNamesWindow().display());
 		viewPrizes.setOnAction(e -> new viewPrizeWindow().display());
 		// Creating row of headers
-		ticketsRemainingRect = new Rectangle(screenWidth/3, screenHeight/18);
-		// TextField for typing removal placed in the center of ticketRemainingPane
-		TextField textField = new TextField();
-		textField.setOpacity(0);
-		StackPane ticketsRemainingPane = new StackPane(ticketsRemainingRect, ticketsRemainingText, textField);
-		ticketsDrawnRect = new Rectangle(screenWidth/3, screenHeight/18);
-		StackPane ticketsDrawnPane = new StackPane(ticketsDrawnRect, ticketsDrawnText);
-		lastTicketDrawnRect = new Rectangle(screenWidth/3, screenHeight/18);
-		StackPane lastTicketDrawnPane = new StackPane(lastTicketDrawnRect, lastTicketDrawnText);
-		ticketsRemainingText.setFont(headerFont);
-		ticketsDrawnText.setFont(headerFont);
-		lastTicketDrawnText.setFont(headerFont);
-		HBox header = new HBox(ticketsRemainingPane, ticketsDrawnPane, lastTicketDrawnPane);
-		rows = new VBox(menuBar, header);
-		header.prefHeightProperty().bind(rows.heightProperty());
-		// Styling row of headers
-		ticketsRemainingRect.setFill(tableBackgroundColor);
-		ticketsRemainingRect.setStroke(borderColor);
-		ticketsDrawnRect.setFill(tableBackgroundColor);
-		ticketsDrawnRect.setStroke(borderColor);
-		lastTicketDrawnRect.setFill(tableBackgroundColor);
-		lastTicketDrawnRect.setStroke(borderColor);
+		rows = new VBox(menuBar, header.getTopLevel());
 		// Sets up ticketCols array
 		for (int i = 0; i < 15; i++) {
 			ticketCols[i] = new HBox();
@@ -213,51 +188,6 @@ public class Raffle extends Application {
 		} catch (Exception e) {
 			new failureWindow("Save file was corrupted.\nRaffle was restarted").display();
 		}
-		// Implementing textField onKeyPressed
-		textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			public void handle(KeyEvent ke) {
-				if (ke.getCode() == KeyCode.ENTER) {
-					// Getting the number that was typed into the text field
-					Integer number = 0;
-					try {
-						number = Integer.parseInt(textField.getText());
-					} catch (Exception e) {
-						textField.clear();
-					}
-					if (number == 800) {
-						for (int i = 1; i < 226; i++) {
-							StackPane chosenTicket = ticketLayout[i-1];
-							if (chosenTicket.isVisible()) {
-								removeTicket(chosenTicket);
-								refreshHeader();
-								prizeCheck();
-							}
-						}
-					}
-					if (number > 0 && number < 226) {
-						StackPane chosenTicket = ticketLayout[number-1];
-						if (chosenTicket.isVisible()) {
-							removeTicket(chosenTicket);
-							refreshHeader();
-							prizeCheck();
-						}
-					}
-					textField.clear();
-				}
-			}
-		});
-
-		// Implementing undo button on lastTicketDrawnPane
-		lastTicketDrawnPane.setOnMouseClicked(e -> {
-			if (!raffleList.isEmpty()) {
-				replaceTicket(ticketLayout[raffleList.get(raffleList.size()-1)-1]);
-				refreshHeader();
-				prizeCheck();
-			}
-		});
-		// Implementing raffle record view on ticketsDrawnPane
-		ticketsDrawnPane.setOnMouseClicked(e -> new raffleRecordWindow().display());
-
 		// Undoes changes made when going into full screen
 		rows.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent ke) {
@@ -321,8 +251,6 @@ public class Raffle extends Application {
 	* @param ticket the StackPane to be removed
 	*/
 	public void removeTicket(StackPane ticket) {
-		// Makes StackPane invisible
-		ticket.setVisible(false);
 		// add ticketNumber to raffleList
 		raffleList.add(Integer.parseInt(ticket.getId()));
 	}
@@ -345,13 +273,7 @@ public class Raffle extends Application {
 	* removed or replaced
 	*/
 	public void refreshHeader() {
-		ticketsRemainingText.setText("Tickets Remaining: " + (NUMBER_OF_TICKETS-raffleList.size()));
-		ticketsDrawnText.setText("Tickets Drawn: " + raffleList.size());
-		if (raffleList.size() == 0) {
-			lastTicketDrawnText.setText("Last Ticket Drawn: 0");
-		} else {
-			lastTicketDrawnText.setText("Last Ticket Drawn: " + raffleList.get(raffleList.size()-1));
-		}
+		header.refreshHeader();
 	}
 
 	/* prizeCheck
@@ -393,7 +315,7 @@ public class Raffle extends Application {
 	*
 	* @param forFullScreen a boolean describing the state of the app
 	*/
-	public void resize(boolean forFullScreen) {
+	public void resize(boolean forFullScreen) {/*
 		double screenHeight = scene.getHeight();
 		double screenWidth = scene.getWidth();
 		ticketsRemainingRect.setWidth(screenWidth/3);
@@ -415,7 +337,7 @@ public class Raffle extends Application {
 				tickets[i].setWidth(screenWidth/15.2);
 				tickets[i].setHeight(screenHeight/17);
 			}
-		}
+		}*/
 	}
 
 	/* restartRaffle
@@ -436,12 +358,6 @@ public class Raffle extends Application {
 	* Updates the background color and border color of all components
 	*/
 	public static void restyle() {
-		ticketsRemainingRect.setFill(tableBackgroundColor);
-		ticketsRemainingRect.setStroke(borderColor);
-		ticketsDrawnRect.setFill(tableBackgroundColor);
-		ticketsDrawnRect.setStroke(borderColor);
-		lastTicketDrawnRect.setFill(tableBackgroundColor);
-		lastTicketDrawnRect.setStroke(borderColor);
 		for (Rectangle r : tickets) {
 			r.setFill(tableBackgroundColor);
 			r.setStroke(borderColor);
